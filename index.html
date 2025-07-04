@@ -260,118 +260,108 @@
         openModal('profileModal');
       }
 
-      // --- Оновлення UI ---
-      function updateUserUI() {
-        const user = localStorage.getItem('currentUser');
-        const userActions = document.getElementById('userActions');
-        if (user) {
-          userActions.innerHTML = `
-            <span class="user-name" style="cursor:pointer;" onclick="openProfile()">${user}</span>
-            <button onclick="openProfile()">Профіль</button>
-            <button onclick="logout()">Вийти</button>
-          `;
-        } else {
-          userActions.innerHTML = `<button id="loginBtn">Увійти</button><button id="registerBtn" style="margin-left:8px;">Реєстрація</button>`;
-          document.getElementById('loginBtn').onclick = () => openModal('loginModal');
-          document.getElementById('registerBtn').onclick = () => openModal('registerModal');
-        }
-      }
+      // --- Навігація між Магазин/Бібліотека ---
+      document.querySelector('.main-nav a:nth-child(1)').onclick = function(e) {
+        e.preventDefault();
+        window.history.pushState({}, '', '/');
+        renderRoute();
+      };
+      document.querySelector('.main-nav a:nth-child(2)').onclick = function(e) {
+        e.preventDefault();
+        window.history.pushState({}, '', '/lib');
+        renderRoute();
+      };
 
       // --- Додаємо кнопку профілю для авторизованого користувача ---
       document.getElementById('profileNavBtn').onclick = function(e) {
         e.preventDefault();
-        openProfile();
-      };
-
-      // --- Навігація між Магазин/Бібліотека ---
-      document.querySelector('.main-nav a:nth-child(1)').onclick = function(e) {
-        e.preventDefault();
-        document.getElementById('storeGames').style.display = '';
-        document.getElementById('librarySection').style.display = 'none';
-        document.getElementById('mainContent').querySelector('h1').textContent = 'Магазин';
-      };
-      document.querySelector('.main-nav a:nth-child(2)').onclick = function(e) {
-        e.preventDefault();
-        document.getElementById('storeGames').style.display = 'none';
-        document.getElementById('librarySection').style.display = '';
-        document.getElementById('mainContent').querySelector('h1').textContent = 'Бібліотека';
-        renderLibrary();
-      };
-
-      // --- Додавання гри у бібліотеку ---
-      function addToLibrary(game) {
         const user = localStorage.getItem('currentUser');
-        if (!user) {
-          alert('Увійдіть, щоб додати гру у бібліотеку!');
-          return;
-        }
-        let libs = JSON.parse(localStorage.getItem('library') || '{}');
-        if (!libs[user]) libs[user] = [];
-        if (!libs[user].includes(game)) {
-          libs[user].push(game);
-          localStorage.setItem('library', JSON.stringify(libs));
-          alert('Гру додано у бібліотеку!');
+        if (user) {
+          window.history.pushState({}, '', `/profile/${encodeURIComponent(user)}`);
+          renderRoute();
         } else {
-          alert('Гра вже у бібліотеці!');
-        }
-      }
-
-      // --- Дані про ігри (можна розширити) ---
-      const GAME_DATA = {
-        'KS Isaac': {
-          title: 'KS Isaac',
-          img: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/250900/capsule_616x353.jpg?t=1731977365',
-          short: 'Roguelike-гра про Айзека, що тікає від матері.',
-          full: `The Binding of KS Isaac — це roguelike-гра, в якій Айзек тікає від своєї матері через небезпечні підземелля, бореться з монстрами, знаходить дивні предмети та відкриває нові можливості. Кожен забіг унікальний завдяки процедурній генерації рівнів, ворогів і предметів.`,
-        },
-        'Kykishield Launcher': {
-          title: 'Kykishield Launcher',
-          img: 'https://sdmntprpolandcentral.oaiusercontent.com/files/00000000-21ec-620a-a28b-37135ee5ef04/raw?se=2025-07-03T20%3A48%3A03Z&sp=r&sv=2024-08-04&sr=b&scid=71af0053-3ef7-5d37-9390-38d952822bc8&skoid=76024c37-11e2-4c92-aa07-7e519fbe2d0f&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-07-03T19%3A38%3A48Z&ske=2025-07-04T19%3A38%3A48Z&sks=b&skv=2024-08-04&sig=IW3qLtLFRTf6NDnYKlk%2B6yEoYKtCyOXh%2BnItnDBA8oA%3D',
-          short: 'Kykishield Launcher — зручний, багатофункціональний, оновлюваний лаунчер для Minecraft.\n',
-          full: `<b>Kykishield Launcher (Minecraft)</b> – це спеціалізований лаунчер для Minecraft, створений для зручного управління та запуску гри. Включає такі функції:<br><br>
-<ul>
-<li><b>Інтуїтивно зрозумілий інтерфейс</b> з простим доступом до налаштувань, встановлених модів та новин.</li>
-<li><b>Підтримка кількох мов</b> для зручності користувачів з різних країн.</li>
-<li><b>Автоматичне оновлення</b> і збірка нових версій гри та модів без необхідності вручну шукати файли.</li>
-<li><b>Персоналізація інтерфейсу</b>: можливість змінювати тему і зовнішній вигляд лаунчера.</li>
-<li><b>Вбудовані інструменти для підтримки модів</b>: легке додавання та оновлення модів через популярні платформи як CurseForge та Modrinth.</li>
-<li><b>Зручний доступ до технічної підтримки</b> та новин про актуальні оновлення гри.</li>
-<li><b>Налаштування запуску</b>: можливість вибору профілю для запуску, що дозволяє зберігати різні налаштування для різних користувачів або умов гри.</li>
-</ul>
-Цей лаунчер робить гру Minecraft ще зручнішою для всіх фанатів, забезпечуючи надійний старт і гнучкість у налаштуваннях.
-`,
+          openModal('loginModal');
         }
       };
-
-      // --- Друзі (імітація) ---
-      const FRIENDS = [
-        { username: 'Andriy', games: { 'KS Isaac': { hours: 12, last: '2024-06-01' } } },
-        { username: 'Oleh', games: { 'KS Isaac': { hours: 3, last: '2024-05-28' } } }
-      ];
 
       // --- Відкриття сторінки гри ---
       function openGameDetails(gameKey) {
-        const game = GAME_DATA[gameKey];
-        if (!game) return;
-        // --- завжди 0 годин і "ніколи" ---
-        let hours = 0, lastPlayed = 'ніколи';
-        let friendsList = '<li>немає</li>';
-        document.getElementById('gameModalContent').innerHTML = `
-          <img src="${game.img}" alt="${game.title}" style="width:100%;border-radius:6px;">
-          <h2>${game.title}</h2>
-          <button style="display:block;margin:16px 0 12px 0;padding:10px 0;width:100%;background:#2980f3;color:#fff;font-size:1.1em;font-weight:bold;border:none;border-radius:4px;cursor:pointer;">ІНСТАЛЮВАТИ</button>
-          <p>${game.full}</p>
-          <hr>
-          <b>Ви:</b>
-          <ul>
-            <li>Годин наіграно: 0 год.</li>
-            <li>Востаннє зіграно: ніколи</li>
-          </ul>
-          <b>Друзі, які грали:</b>
-          <ul>${friendsList}</ul>
-        `;
-        openModal('gameModal');
+        // slugify
+        const slug = gameKey.toLowerCase().replace(/\s+/g, '_');
+        window.history.pushState({}, '', `/game/${slug}/`);
+        renderRoute();
       }
+
+      // --- SPA роутер ---
+      function renderRoute() {
+        // Ховаємо всі модалки
+        document.querySelectorAll('.modal-bg').forEach(m => m.classList.remove('active'));
+        // Показуємо/ховаємо секції
+        const path = location.pathname.replace(/\/+$/, '');
+        // Магазин (головна)
+        if (path === '' || path === '/' || path === '/index.html') {
+          document.getElementById('storeGames').style.display = '';
+          document.getElementById('librarySection').style.display = 'none';
+          document.getElementById('mainContent').querySelector('h1').textContent = 'Магазин';
+        }
+        // Бібліотека
+        else if (path === '/lib') {
+          document.getElementById('storeGames').style.display = 'none';
+          document.getElementById('librarySection').style.display = '';
+          document.getElementById('mainContent').querySelector('h1').textContent = 'Бібліотека';
+          renderLibrary();
+        }
+        // Профіль
+        else if (path.startsWith('/profile/')) {
+          const user = decodeURIComponent(path.split('/')[2] || '');
+          if (user && user === localStorage.getItem('currentUser')) {
+            openProfile();
+          } else {
+            // чужий профіль або неавторизований
+            document.getElementById('profileContent').innerHTML = '<p>Профіль не знайдено або ви не авторизовані.</p>';
+            openModal('profileModal');
+          }
+        }
+        // Сторінка гри
+        else if (path.startsWith('/game/')) {
+          const slug = path.split('/')[2];
+          let gameKey = null;
+          // reverse slugify
+          for (const key in GAME_DATA) {
+            if (key.toLowerCase().replace(/\s+/g, '_') === slug) {
+              gameKey = key;
+              break;
+            }
+          }
+          if (gameKey) {
+            // --- завжди 0 годин і "ніколи" ---
+            let hours = 0, lastPlayed = 'ніколи';
+            let friendsList = '<li>немає</li>';
+            const game = GAME_DATA[gameKey];
+            document.getElementById('gameModalContent').innerHTML = `
+              <img src="${game.img}" alt="${game.title}" style="width:100%;border-radius:6px;">
+              <h2>${game.title}</h2>
+              <button style="display:block;margin:16px 0 12px 0;padding:10px 0;width:100%;background:#2980f3;color:#fff;font-size:1.1em;font-weight:bold;border:none;border-radius:4px;cursor:pointer;">ІНСТАЛЮВАТИ</button>
+              <p>${game.full}</p>
+              <hr>
+              <b>Ви:</b>
+              <ul>
+                <li>Годин наіграно: 0 год.</li>
+                <li>Востаннє зіграно: ніколи</li>
+              </ul>
+              <b>Друзі, які грали:</b>
+              <ul>${friendsList}</ul>
+            `;
+            openModal('gameModal');
+          } else {
+            document.getElementById('gameModalContent').innerHTML = '<p>Гра не знайдена.</p>';
+            openModal('gameModal');
+          }
+        }
+      }
+
+      // --- SPA: реагуємо на popstate (назад/вперед) ---
+      window.addEventListener('popstate', renderRoute);
 
       // --- Додаємо клік на картки у бібліотеці ---
       function renderLibrary() {
@@ -415,7 +405,26 @@
         }
       }
 
+      // --- Оновлення UI ---
+      function updateUserUI() {
+        const user = localStorage.getItem('currentUser');
+        const userActions = document.getElementById('userActions');
+        if (user) {
+          userActions.innerHTML = `
+            <span class="user-name" style="cursor:pointer;" onclick="openProfile()">${user}</span>
+            <button onclick="openProfile()">Профіль</button>
+            <button onclick="logout()">Вийти</button>
+          `;
+        } else {
+          userActions.innerHTML = `<button id="loginBtn">Увійти</button><button id="registerBtn" style="margin-left:8px;">Реєстрація</button>`;
+          document.getElementById('loginBtn').onclick = () => openModal('loginModal');
+          document.getElementById('registerBtn').onclick = () => openModal('registerModal');
+        }
+      }
+
       updateUserUI();
+      // --- SPA: рендеримо потрібний розділ при завантаженні ---
+      renderRoute();
     </script>
 </body>
 </html>
