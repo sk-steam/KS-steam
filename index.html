@@ -260,87 +260,85 @@
         openModal('profileModal');
       }
 
-      // --- Навігація між Магазин/Бібліотека ---
-      document.querySelector('.main-nav a:nth-child(1)').onclick = function(e) {
-        e.preventDefault();
-        window.history.pushState({}, '', '/');
-        renderRoute();
-      };
-      document.querySelector('.main-nav a:nth-child(2)').onclick = function(e) {
-        e.preventDefault();
-        window.history.pushState({}, '', '/lib');
-        renderRoute();
-      };
-
-      // --- Додаємо кнопку профілю для авторизованого користувача ---
-      document.getElementById('profileNavBtn').onclick = function(e) {
-        e.preventDefault();
+      // --- Оновлення UI ---
+      function updateUserUI() {
         const user = localStorage.getItem('currentUser');
+        const userActions = document.getElementById('userActions');
         if (user) {
-          window.history.pushState({}, '', `/profile/${encodeURIComponent(user)}`);
-          renderRoute();
+          userActions.innerHTML = `
+            <span class="user-name" style="cursor:pointer;" onclick="openProfile()">${user}</span>
+            <button onclick="openProfile()">Профіль</button>
+            <button onclick="logout()">Вийти</button>
+          `;
         } else {
-          openModal('loginModal');
+          userActions.innerHTML = `<button id="loginBtn">Увійти</button><button id="registerBtn" style="margin-left:8px;">Реєстрація</button>`;
+          document.getElementById('loginBtn').onclick = () => openModal('loginModal');
+          document.getElementById('registerBtn').onclick = () => openModal('registerModal');
         }
-      };
-
-      // --- Відкриття сторінки гри ---
-      function openGameDetails(gameKey) {
-        // slugify
-        const slug = gameKey.toLowerCase().replace(/\s+/g, '_');
-        window.history.pushState({}, '', `/game/${slug}/`);
-        renderRoute();
       }
 
-      // --- SPA роутер ---
-      function renderRoute() {
-        // Ховаємо всі модалки
-        document.querySelectorAll('.modal-bg').forEach(m => m.classList.remove('active'));
-        // Показуємо/ховаємо секції
-        const path = location.pathname.replace(/\/+$/, '');
-        // Магазин (головна)
-        if (path === '' || path === '/' || path === '/index.html') {
+      // --- SPA Routing ---
+      function navigate(path) {
+        window.history.pushState({}, '', path);
+        renderPage();
+      }
+
+      // --- Рендер сторінки залежно від location.pathname ---
+      function renderPage() {
+        const path = window.location.pathname.replace(/\/+$/, ''); // remove trailing slash
+        const mainContent = document.getElementById('mainContent');
+        // --- Головна (магазин) ---
+        if (path.endsWith('/KS_Steam') || path.endsWith('/KS_Steam/index.html') || path.endsWith('/KS_Steam/')) {
           document.getElementById('storeGames').style.display = '';
           document.getElementById('librarySection').style.display = 'none';
-          document.getElementById('mainContent').querySelector('h1').textContent = 'Магазин';
+          mainContent.querySelector('h1').textContent = 'Магазин';
         }
-        // Бібліотека
-        else if (path === '/lib') {
+        // --- Бібліотека ---
+        else if (path.endsWith('/KS_Steam/lib')) {
           document.getElementById('storeGames').style.display = 'none';
           document.getElementById('librarySection').style.display = '';
-          document.getElementById('mainContent').querySelector('h1').textContent = 'Бібліотека';
+          mainContent.querySelector('h1').textContent = 'Бібліотека';
           renderLibrary();
         }
-        // Профіль
-        else if (path.startsWith('/profile/')) {
-          const user = decodeURIComponent(path.split('/')[2] || '');
-          if (user && user === localStorage.getItem('currentUser')) {
-            openProfile();
+        // --- Профіль ---
+        else if (path.startsWith('/KS_Steam/profile')) {
+          document.getElementById('storeGames').style.display = 'none';
+          document.getElementById('librarySection').style.display = 'none';
+          mainContent.querySelector('h1').textContent = 'Профіль';
+          // Відобразити профіль прямо у mainContent
+          const username = localStorage.getItem('currentUser');
+          let log = getLogFolder();
+          const user = log.users.find(u => u.username === username);
+          if (!user) {
+            mainContent.innerHTML = '<h1>Профіль</h1><p>Увійдіть, щоб переглянути профіль.</p>';
           } else {
-            // чужий профіль або неавторизований
-            document.getElementById('profileContent').innerHTML = '<p>Профіль не знайдено або ви не авторизовані.</p>';
-            openModal('profileModal');
+            mainContent.innerHTML = `<h1>Профіль</h1>
+              <p><b>Логін:</b> ${user.username}</p>
+              <p><b>Електронна пошта:</b> ${user.email}</p>
+            `;
           }
         }
-        // Сторінка гри
-        else if (path.startsWith('/game/')) {
-          const slug = path.split('/')[2];
-          let gameKey = null;
-          // reverse slugify
-          for (const key in GAME_DATA) {
-            if (key.toLowerCase().replace(/\s+/g, '_') === slug) {
-              gameKey = key;
-              break;
-            }
+        // --- Сторінка гри ---
+        else if (path.startsWith('/KS_Steam/game/')) {
+          document.getElementById('storeGames').style.display = 'none';
+          document.getElementById('librarySection').style.display = 'none';
+          // Витягуємо ключ гри
+          const gameKey = path.split('/').pop();
+          let gameId = '';
+          if (gameKey === 'ks_isaac') gameId = 'KS Isaac';
+          else if (gameKey === 'kykishield_launcher') gameId = 'Kykishield Launcher';
+          const game = GAME_DATA[gameId];
+          if (!game) {
+            mainContent.innerHTML = '<h1>Гра не знайдена</h1>';
+            return;
           }
-          if (gameKey) {
-            // --- завжди 0 годин і "ніколи" ---
-            let hours = 0, lastPlayed = 'ніколи';
-            let friendsList = '<li>немає</li>';
-            const game = GAME_DATA[gameKey];
-            document.getElementById('gameModalContent').innerHTML = `
+          // --- завжди 0 годин і "ніколи" ---
+          let hours = 0, lastPlayed = 'ніколи';
+          let friendsList = '<li>немає</li>';
+          mainContent.innerHTML = `
+            <h1>${game.title}</h1>
+            <div style="max-width:600px;margin:auto;">
               <img src="${game.img}" alt="${game.title}" style="width:100%;border-radius:6px;">
-              <h2>${game.title}</h2>
               <button style="display:block;margin:16px 0 12px 0;padding:10px 0;width:100%;background:#2980f3;color:#fff;font-size:1.1em;font-weight:bold;border:none;border-radius:4px;cursor:pointer;">ІНСТАЛЮВАТИ</button>
               <p>${game.full}</p>
               <hr>
@@ -351,17 +349,48 @@
               </ul>
               <b>Друзі, які грали:</b>
               <ul>${friendsList}</ul>
-            `;
-            openModal('gameModal');
-          } else {
-            document.getElementById('gameModalContent').innerHTML = '<p>Гра не знайдена.</p>';
-            openModal('gameModal');
-          }
+            </div>
+          `;
         }
       }
 
-      // --- SPA: реагуємо на popstate (назад/вперед) ---
-      window.addEventListener('popstate', renderRoute);
+      // --- SPA-посилання для навігації ---
+      document.querySelector('.main-nav a:nth-child(1)').onclick = function(e) {
+        e.preventDefault();
+        navigate('/KS_Steam/');
+      };
+      document.querySelector('.main-nav a:nth-child(2)').onclick = function(e) {
+        e.preventDefault();
+        navigate('/KS_Steam/lib');
+      };
+      document.getElementById('profileNavBtn').onclick = function(e) {
+        e.preventDefault();
+        navigate('/KS_Steam/profile');
+      };
+
+      // --- Додаємо клік на ім'я користувача та кнопку профілю ---
+      function updateUserUI() {
+        const user = localStorage.getItem('currentUser');
+        const userActions = document.getElementById('userActions');
+        if (user) {
+          userActions.innerHTML = `
+            <span class="user-name" style="cursor:pointer;" onclick="navigate('/KS_Steam/profile')">${user}</span>
+            <button onclick="navigate('/KS_Steam/profile')">Профіль</button>
+            <button onclick="logout()">Вийти</button>
+          `;
+        } else {
+          userActions.innerHTML = `<button id="loginBtn">Увійти</button><button id="registerBtn" style="margin-left:8px;">Реєстрація</button>`;
+          document.getElementById('loginBtn').onclick = () => openModal('loginModal');
+          document.getElementById('registerBtn').onclick = () => openModal('registerModal');
+        }
+      }
+
+      // --- Додаємо клік на картки ігор у магазині ---
+      function openGameDetails(gameKey) {
+        // Перехід на сторінку гри
+        if (gameKey === 'KS Isaac') navigate('/KS_Steam/game/ks_isaac');
+        else if (gameKey === 'Kykishield Launcher') navigate('/KS_Steam/game/kykishield_launcher');
+      }
 
       // --- Додаємо клік на картки у бібліотеці ---
       function renderLibrary() {
@@ -405,26 +434,12 @@
         }
       }
 
-      // --- Оновлення UI ---
-      function updateUserUI() {
-        const user = localStorage.getItem('currentUser');
-        const userActions = document.getElementById('userActions');
-        if (user) {
-          userActions.innerHTML = `
-            <span class="user-name" style="cursor:pointer;" onclick="openProfile()">${user}</span>
-            <button onclick="openProfile()">Профіль</button>
-            <button onclick="logout()">Вийти</button>
-          `;
-        } else {
-          userActions.innerHTML = `<button id="loginBtn">Увійти</button><button id="registerBtn" style="margin-left:8px;">Реєстрація</button>`;
-          document.getElementById('loginBtn').onclick = () => openModal('loginModal');
-          document.getElementById('registerBtn').onclick = () => openModal('registerModal');
-        }
-      }
+      // --- SPA: реагуємо на popstate (назад/вперед) ---
+      window.onpopstate = renderPage;
 
+      // --- Ініціалізація ---
       updateUserUI();
-      // --- SPA: рендеримо потрібний розділ при завантаженні ---
-      renderRoute();
+      renderPage();
     </script>
 </body>
 </html>
