@@ -99,6 +99,15 @@
                     <button onclick="event.stopPropagation();addToLibrary('Kykishield Launcher')">Додати у бібліотеку</button>
                 </div>
             </div>
+            <!-- Додаємо KS_okey_translate -->
+            <div class="game-card" onclick="openGameDetails('KS_okey_translate')">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSx2CWjDn0iof-V_bt61pC3rqr-uKsJJ8qdbg&s" alt="KS_okey_translate">
+                <div class="game-info">
+                    <h2>KS_okey_translate</h2>
+                    <p>Переклад мовлення з субтитрами та озвучкою в реальному часі</p>
+                    <button onclick="event.stopPropagation();addToLibrary('KS_okey_translate')">Додати у бібліотеку</button>
+                </div>
+            </div>
             <!-- ...ще картки ігор... -->
         </div>
         <div id="librarySection" style="display:none;">
@@ -340,6 +349,26 @@
 </ul>
 Цей лаунчер робить гру Minecraft ще зручнішою для всіх фанатів, забезпечуючи надійний старт і гнучкість у налаштуваннях.
 `,
+        },
+        // Додаємо KS_okey_translate
+        'KS_okey_translate': {
+          title: 'KS_okey_translate',
+          img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSx2CWjDn0iof-V_bt61pC3rqr-uKsJJ8qdbg&s',
+          short: 'Переклад мовлення з субтитрами та озвучкою в реальному часі',
+          full: `KS_okey_translate — це інтелектуальна Python-програма, яка в реальному часі захоплює звуковий потік (мовлення), перетворює його на текст, перекладає з англійської (або іншої мови) на українську, відображає переклад у вигляді субтитрів на екрані та синтезує українську озвучку.<br>
+Програма ідеально підходить для перегляду англомовного відео (наприклад, з YouTube), спілкування іноземною мовою, навчання або роботи з мультимедійним контентом.<br>
+Серед особливостей:
+<ul>
+<li>автоматичне розпізнавання мовлення з мікрофона або аудіо вікна,</li>
+<li>точний переклад українською мовою з можливістю налаштування інших мов,</li>
+<li>вивід субтитрів у зручному overlay-вікні поверх браузера чи іншої програми,</li>
+<li>опціональна озвучка перекладеного тексту голосовими синтезаторами (TTS).</li>
+</ul>
+Підходить для використання на Windows, Linux або macOS.<br>
+Може працювати повністю офлайн (з відповідними моделями) або з доступом до API для кращої точності.<br>
+<br>
+(СКОРО БУДЕ)
+`
         }
       };
 
@@ -356,10 +385,16 @@
         // --- завжди 0 годин і "ніколи" ---
         let hours = 0, lastPlayed = 'ніколи';
         let friendsList = '<li>немає</li>';
+        let actionButton = '';
+        if (gameKey === 'KS_okey_translate') {
+          actionButton = `<button style="display:block;margin:16px 0 12px 0;padding:10px 0;width:100%;background:#555;color:#ccc;font-size:1.1em;font-weight:bold;border:none;border-radius:4px;cursor:not-allowed;" disabled>СКОРО БУДЕ</button>`;
+        } else {
+          actionButton = `<button style="display:block;margin:16px 0 12px 0;padding:10px 0;width:100%;background:#2980f3;color:#fff;font-size:1.1em;font-weight:bold;border:none;border-radius:4px;cursor:pointer;">ІНСТАЛЮВАТИ</button>`;
+        }
         document.getElementById('gameModalContent').innerHTML = `
           <img src="${game.img}" alt="${game.title}" style="width:100%;border-radius:6px;">
           <h2>${game.title}</h2>
-          <button style="display:block;margin:16px 0 12px 0;padding:10px 0;width:100%;background:#2980f3;color:#fff;font-size:1.1em;font-weight:bold;border:none;border-radius:4px;cursor:pointer;">ІНСТАЛЮВАТИ</button>
+          ${actionButton}
           <p>${game.full}</p>
           <hr>
           <b>Ви:</b>
@@ -409,6 +444,18 @@
                     <h2>Kykishield Launcher</h2>
                     <p>Kykishield Launcher — зручний, багатофункціональний, оновлюваний лаунчер для Minecraft.
 </p>
+                </div>
+            </div>
+          `;
+        }
+        // Показати KS_okey_translate, якщо є у бібліотеці
+        if (games.includes('KS_okey_translate')) {
+          gamesDiv.innerHTML += `
+            <div class="game-card" onclick="openGameDetails('KS_okey_translate')">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSx2CWjDn0iof-V_bt61pC3rqr-uKsJJ8qdbg&s" alt="KS_okey_translate">
+                <div class="game-info">
+                    <h2>KS_okey_translate</h2>
+                    <p>Переклад мовлення з субтитрами та озвучкою в реальному часі</p>
                 </div>
             </div>
           `;
