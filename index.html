@@ -53,6 +53,77 @@
         margin-right: 12px;
         font-weight: bold;
       }
+      /* Steam-профіль стиль */
+      .steam-profile-bg {
+        background: linear-gradient(135deg, #1b2838 60%, #171a21 100%);
+        padding: 0 0 48px 0;
+        min-height: 420px;
+      }
+      .steam-profile-header {
+        display: flex;
+        align-items: flex-end;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 32px 0 32px;
+      }
+      .steam-profile-avatar {
+        width: 164px;
+        height: 164px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 0 4px #23262e, 0 0 16px #000a;
+        background: #23262e;
+        flex-shrink: 0;
+      }
+      .steam-profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .steam-profile-info {
+        margin-left: 32px;
+        color: #c7d5e0;
+        flex: 1;
+      }
+      .steam-profile-nick {
+        font-size: 2.2em;
+        font-weight: bold;
+        color: #66c0f4;
+        margin-bottom: 8px;
+        text-shadow: 0 2px 8px #000a;
+      }
+      .steam-profile-status {
+        color: #5bc0de;
+        font-size: 1.1em;
+        margin-bottom: 12px;
+        font-weight: 500;
+      }
+      .steam-profile-email {
+        color: #b8b6b4;
+        font-size: 1.1em;
+        margin-bottom: 18px;
+      }
+      .steam-profile-logout-btn {
+        background: linear-gradient(90deg,#305d8a 0%,#1b2838 100%);
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        padding: 10px 32px;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 2px 8px #0005;
+        transition: background 0.2s;
+      }
+      .steam-profile-logout-btn:hover {
+        background: linear-gradient(90deg,#417dbb 0%,#22344a 100%);
+      }
+      @media (max-width: 600px) {
+        .steam-profile-header { flex-direction: column; align-items: center; padding: 24px 8px 0 8px; }
+        .steam-profile-info { margin-left: 0; margin-top: 18px; text-align: center; }
+        .steam-profile-avatar { width: 110px; height: 110px; }
+      }
     </style>
 </head>
 <body>
@@ -108,11 +179,50 @@
                     <button onclick="event.stopPropagation();addToLibrary('KS_okey_translate')">Додати у бібліотеку</button>
                 </div>
             </div>
+            <!-- Додаємо Solo Up Game -->
+            <div class="game-card" onclick="openGameDetails('Solo Up Game')">
+                <img src="asset/solo_up.png" alt="Solo Up Game">
+                <div class="game-info">
+                    <h2>Solo Up Game</h2>
+                    <p>немає</p>
+                    <button onclick="event.stopPropagation();addToLibrary('Solo Up Game')">Додати у бібліотеку</button>
+                </div>
+            </div>
             <!-- ...ще картки ігор... -->
         </div>
         <div id="librarySection" style="display:none;">
             <div class="game-cards" id="libraryGames">
                 <!-- Динамічно заповнюється JS -->
+            </div>
+        </div>
+        <!-- Додаємо вкладку профілю -->
+        <div id="profileSection" style="display:none;">
+            <div class="steam-profile-bg">
+                <div class="steam-profile-header">
+                    <div class="steam-profile-avatar">
+                        <img id="profileAvatar" src="https://artikel.rumah123.com/wp-content/uploads/sites/41/2023/09/12160753/gambar-foto-profil-whatsapp-kosong.jpg" alt="avatar">
+                    </div>
+                    <div class="steam-profile-info" id="profileInfo">
+                        <!-- Динамічно заповнюється JS -->
+                    </div>
+                </div>
+                <!-- Налаштування профіля -->
+                <div id="profileSettings" style="max-width:800px;margin:32px auto 0 auto;padding:24px 32px;background:#23262e;border-radius:8px;box-shadow:0 2px 16px #0004;display:none;">
+                    <h3 style="color:#66c0f4;margin-top:0;">Налаштування профіля</h3>
+                    <form id="profileSettingsForm" autocomplete="off">
+                        <label style="color:#b8b6b4;">Логін</label>
+                        <input type="text" id="settings-username" style="width:100%;margin-bottom:12px;" required>
+                        <label style="color:#b8b6b4;">Електронна пошта</label>
+                        <input type="email" id="settings-email" style="width:100%;margin-bottom:12px;" required>
+                        <label style="color:#b8b6b4;">Змінити пароль</label>
+                        <input type="password" id="settings-password" placeholder="Новий пароль (залиште порожнім, якщо не змінювати)" style="width:100%;margin-bottom:12px;">
+                        <label style="color:#b8b6b4;">Аватар (URL)</label>
+                        <input type="url" id="settings-avatar" placeholder="Вставте посилання на зображення" style="width:100%;margin-bottom:12px;">
+                        <button type="submit" class="steam-profile-logout-btn" style="margin-top:8px;">Зберегти</button>
+                        <button type="button" id="cancelSettingsBtn" style="margin-left:16px;background:#444;">Скасувати</button>
+                        <div id="settingsMsg" style="color:#5bc0de;margin-top:10px;"></div>
+                    </form>
+                </div>
             </div>
         </div>
     </main>
@@ -154,16 +264,6 @@
         <div id="registerError" style="color:#e74c3c; margin-top:8px;"></div>
       </div>
     </div>
-    <!-- Модальне вікно профілю -->
-    <div class="modal-bg" id="profileModal">
-      <div class="modal">
-        <button class="close-btn" onclick="closeModal('profileModal')">&times;</button>
-        <h2>Профіль</h2>
-        <div id="profileContent">
-          <!-- Динамічно заповнюється JS -->
-        </div>
-      </div>
-    </div>
     <!-- Модальне вікно гри -->
     <div class="modal-bg" id="gameModal">
       <div class="modal" style="max-width:500px;max-height:90vh;overflow-y:auto;">
@@ -172,6 +272,26 @@
           <!-- Динамічно заповнюється JS -->
         </div>
       </div>
+    </div>
+    <!-- Додаємо модальне вікно налаштувань профіля -->
+    <div class="modal-bg" id="profileSettingsModal">
+        <div class="modal" style="max-width:500px;width:95%;">
+            <button class="close-btn" onclick="closeModal('profileSettingsModal')">&times;</button>
+            <h3 style="color:#66c0f4;margin-top:0;">Налаштування профіля</h3>
+            <form id="profileSettingsForm" autocomplete="off">
+                <label style="color:#b8b6b4;">Логін</label>
+                <input type="text" id="settings-username" style="width:100%;margin-bottom:12px;" required>
+                <label style="color:#b8b6b4;">Електронна пошта</label>
+                <input type="email" id="settings-email" style="width:100%;margin-bottom:12px;" required>
+                <label style="color:#b8b6b4;">Змінити пароль</label>
+                <input type="password" id="settings-password" placeholder="Новий пароль (залиште порожнім, якщо не змінювати)" style="width:100%;margin-bottom:12px;">
+                <label style="color:#b8b6b4;">Аватар (URL)</label>
+                <input type="url" id="settings-avatar" placeholder="Вставте посилання на зображення" style="width:100%;margin-bottom:12px;">
+                <button type="submit" class="steam-profile-logout-btn" style="margin-top:8px;">Зберегти</button>
+                <button type="button" id="cancelSettingsBtn" style="margin-left:16px;background:#444;">Скасувати</button>
+                <div id="settingsMsg" style="color:#5bc0de;margin-top:10px;"></div>
+            </form>
+        </div>
     </div>
     <script>
       // --- Логіка для модалок ---
@@ -254,20 +374,106 @@
         updateUserUI();
       }
 
-      // --- Профіль ---
-      function openProfile() {
+      // --- Профіль (Steam style) ---
+      function showProfileTab() {
+        document.getElementById('storeGames').style.display = 'none';
+        document.getElementById('librarySection').style.display = 'none';
+        document.getElementById('profileSection').style.display = '';
+        document.getElementById('mainContent').querySelector('h1').textContent = 'Профіль';
+        // Приховуємо старий блок налаштувань (залишено для сумісності)
+        // document.getElementById('profileSettings').style.display = 'none';
         const username = localStorage.getItem('currentUser');
-        if (!username) return;
+        const profileInfo = document.getElementById('profileInfo');
+        if (!username) {
+          profileInfo.innerHTML = '<p>Увійдіть, щоб переглянути профіль.</p>';
+          document.getElementById('profileAvatar').src = "https://artikel.rumah123.com/wp-content/uploads/sites/41/2023/09/12160753/gambar-foto-profil-whatsapp-kosong.jpg";
+          return;
+        }
+        let log = getLogFolder();
+        const user = log.users.find(u => u.username === username);
+        if (!user) {
+          profileInfo.innerHTML = '<p>Користувача не знайдено.</p>';
+          document.getElementById('profileAvatar').src = "https://artikel.rumah123.com/wp-content/uploads/sites/41/2023/09/12160753/gambar-foto-profil-whatsapp-kosong.jpg";
+          return;
+        }
+        // Встановлюємо аватарку
+        document.getElementById('profileAvatar').src = user.avatar || "https://artikel.rumah123.com/wp-content/uploads/sites/41/2023/09/12160753/gambar-foto-profil-whatsapp-kosong.jpg";
+        profileInfo.innerHTML = `
+          <div class="steam-profile-nick">${user.username}</div>
+          <div class="steam-profile-status">В мережі</div>
+          <div class="steam-profile-email">${user.email}</div>
+          <button class="steam-profile-logout-btn" onclick="logout()">Вийти</button>
+          <button class="steam-profile-logout-btn" style="margin-left:16px;background:#444;" onclick="openProfileSettingsModal()">Налаштування</button>
+        `;
+      }
+
+      // --- Відкрити налаштування профіля у модалці ---
+      function openProfileSettingsModal() {
+        const username = localStorage.getItem('currentUser');
         let log = getLogFolder();
         const user = log.users.find(u => u.username === username);
         if (!user) return;
-        const profileContent = document.getElementById('profileContent');
-        profileContent.innerHTML = `
-          <p><b>Логін:</b> ${user.username}</p>
-          <p><b>Електронна пошта:</b> ${user.email}</p>
-        `;
-        openModal('profileModal');
+        openModal('profileSettingsModal');
+        // Заповнюємо поля
+        document.getElementById('settings-username').value = user.username;
+        document.getElementById('settings-email').value = user.email;
+        document.getElementById('settings-password').value = '';
+        document.getElementById('settings-avatar').value = user.avatar || '';
+        document.getElementById('settingsMsg').textContent = '';
       }
+
+      // --- Зберегти налаштування профіля ---
+      document.getElementById('profileSettingsForm').onsubmit = function(e) {
+        e.preventDefault();
+        const username = localStorage.getItem('currentUser');
+        let log = getLogFolder();
+        let user = log.users.find(u => u.username === username);
+        if (!user) return;
+        const newUsername = document.getElementById('settings-username').value.trim();
+        const newEmail = document.getElementById('settings-email').value.trim();
+        const newPassword = document.getElementById('settings-password').value;
+        const newAvatar = document.getElementById('settings-avatar').value.trim();
+        const msg = document.getElementById('settingsMsg');
+        // Перевірки
+        if (!/^[^@]+@[^@]+\.[^@]+$/.test(newEmail)) {
+          msg.textContent = 'Введіть коректну електронну пошту';
+          msg.style.color = '#e74c3c';
+          return;
+        }
+        if (!newUsername) {
+          msg.textContent = 'Логін не може бути порожнім';
+          msg.style.color = '#e74c3c';
+          return;
+        }
+        // Унікальність логіна/пошти (крім себе)
+        if (log.users.some(u => u.username === newUsername && u !== user)) {
+          msg.textContent = 'Такий логін вже існує';
+          msg.style.color = '#e74c3c';
+          return;
+        }
+        if (log.users.some(u => u.email === newEmail && u !== user)) {
+          msg.textContent = 'Така пошта вже використовується';
+          msg.style.color = '#e74c3c';
+          return;
+        }
+        // Оновлення
+        user.username = newUsername;
+        user.email = newEmail;
+        if (newPassword) user.password = newPassword;
+        user.avatar = newAvatar || "https://artikel.rumah123.com/wp-content/uploads/sites/41/2023/09/12160753/gambar-foto-profil-whatsapp-kosong.jpg";
+        setLogFolder(log);
+        localStorage.setItem('currentUser', newUsername);
+        msg.textContent = 'Збережено!';
+        msg.style.color = '#5bc0de';
+        closeModal('profileSettingsModal');
+        showProfileTab();
+        updateUserUI();
+      };
+
+      // --- Скасувати налаштування ---
+      document.getElementById('cancelSettingsBtn').onclick = function() {
+        closeModal('profileSettingsModal');
+      };
 
       // --- Оновлення UI ---
       function updateUserUI() {
@@ -275,8 +481,8 @@
         const userActions = document.getElementById('userActions');
         if (user) {
           userActions.innerHTML = `
-            <span class="user-name" style="cursor:pointer;" onclick="openProfile()">${user}</span>
-            <button onclick="openProfile()">Профіль</button>
+            <span class="user-name" style="cursor:pointer;" onclick="showProfileTab()">${user}</span>
+            <button onclick="showProfileTab()">Профіль</button>
             <button onclick="logout()">Вийти</button>
           `;
         } else {
@@ -286,23 +492,25 @@
         }
       }
 
-      // --- Додаємо кнопку профілю для авторизованого користувача ---
+      // --- Додаємо клік на пункт меню "Профіль" ---
       document.getElementById('profileNavBtn').onclick = function(e) {
         e.preventDefault();
-        openProfile();
+        showProfileTab();
       };
 
-      // --- Навігація між Магазин/Бібліотека ---
+      // --- Навігація між Магазин/Бібліотека/Профіль ---
       document.querySelector('.main-nav a:nth-child(1)').onclick = function(e) {
         e.preventDefault();
         document.getElementById('storeGames').style.display = '';
         document.getElementById('librarySection').style.display = 'none';
+        document.getElementById('profileSection').style.display = 'none';
         document.getElementById('mainContent').querySelector('h1').textContent = 'Магазин';
       };
       document.querySelector('.main-nav a:nth-child(2)').onclick = function(e) {
         e.preventDefault();
         document.getElementById('storeGames').style.display = 'none';
         document.getElementById('librarySection').style.display = '';
+        document.getElementById('profileSection').style.display = 'none';
         document.getElementById('mainContent').querySelector('h1').textContent = 'Бібліотека';
         renderLibrary();
       };
@@ -369,6 +577,18 @@
 <br>
 (СКОРО БУДЕ)
 `
+        },
+        // Додаємо Solo Up Game
+        'Solo Up Game': {
+          title: 'Solo Up Game',
+          img: 'asset/solo_up.png',
+          short: 'немає',
+          full: `<b>Solo Up Game</b><br><br>
+                 <b>Список змін:</b><br>
+                 <ul>
+                   <li>2025.09.06 - Solo Up 2025</li>
+                    <li>2025.09.06 - renamed from "KS Game" to "Solo Up Game"</li>
+                 </ul>`
         }
       };
 
@@ -456,6 +676,18 @@
                 <div class="game-info">
                     <h2>KS_okey_translate</h2>
                     <p>Переклад мовлення з субтитрами та озвучкою в реальному часі</p>
+                </div>
+            </div>
+          `;
+        }
+        // Показати Solo Up Game, якщо є у бібліотеці
+        if (games.includes('Solo Up Game')) {
+          gamesDiv.innerHTML += `
+            <div class="game-card" onclick="openGameDetails('Solo Up Game')">
+                <img src="asset/solo_up.png" alt="Solo Up Game">
+                <div class="game-info">
+                    <h2>Solo Up Game</h2>
+                    <p>немає</p>
                 </div>
             </div>
           `;
