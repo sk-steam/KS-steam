@@ -606,8 +606,21 @@
         let hours = 0, lastPlayed = 'ніколи';
         let friendsList = '<li>немає</li>';
         let actionButton = '';
+
+        // Перевіряємо чи гра Solo Up вже встановлена
+        const isInstalled = localStorage.getItem('soloUpInstalled') === 'true';
+        
         if (gameKey === 'KS_okey_translate') {
           actionButton = `<button style="display:block;margin:16px 0 12px 0;padding:10px 0;width:100%;background:#555;color:#ccc;font-size:1.1em;font-weight:bold;border:none;border-radius:4px;cursor:not-allowed;" disabled>СКОРО БУДЕ</button>`;
+        } else if (gameKey === 'Solo Up Game') {
+          const buttonStyle = isInstalled ? 
+            'background:#4CAF50;' : // Зелений для кнопки ГРАТИ
+            'background:#2980f3;';  // Синій для кнопки ІНСТАЛЮВАТИ
+          const buttonText = isInstalled ? 'ГРАТИ' : 'ІНСТАЛЮВАТИ';
+          const onClick = isInstalled ? 
+            'launchSoloUp()' : 
+            'installSoloUp()';
+          actionButton = `<button onclick="${onClick}" style="display:block;margin:16px 0 12px 0;padding:10px 0;width:100%;${buttonStyle}color:#fff;font-size:1.1em;font-weight:bold;border:none;border-radius:4px;cursor:pointer;">${buttonText}</button>`;
         } else {
           actionButton = `<button style="display:block;margin:16px 0 12px 0;padding:10px 0;width:100%;background:#2980f3;color:#fff;font-size:1.1em;font-weight:bold;border:none;border-radius:4px;cursor:pointer;">ІНСТАЛЮВАТИ</button>`;
         }
@@ -626,6 +639,62 @@
           <ul>${friendsList}</ul>
         `;
         openModal('gameModal');
+      }
+
+      // Додаємо функції для інсталяції та запуску Solo Up
+      async function installSoloUp() {
+        try {
+          // Імітуємо завантаження
+          const progress = document.querySelector('#gameModalContent button');
+          progress.textContent = 'ЗАВАНТАЖЕННЯ...';
+          progress.style.background = '#555';
+          
+          // Створюємо посилання для завантаження
+          const downloadLink = document.createElement('a');
+          downloadLink.href = 'dll/program/Solo_Up_Game.zip'; // Архів з грою
+          downloadLink.download = 'Solo_Up_Game.zip';
+          document.body.appendChild(downloadLink);
+          
+          // Запускаємо завантаження
+          downloadLink.click();
+          
+          // Видаляємо посилання
+          document.body.removeChild(downloadLink);
+          
+          // Імітуємо процес завантаження
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          
+          // Зберігаємо стан інсталяції
+          localStorage.setItem('soloUpInstalled', 'true');
+          
+          // Оновлюємо кнопку
+          progress.textContent = 'ГРАТИ';
+          progress.style.background = '#4CAF50';
+          progress.onclick = launchSoloUp;
+          
+          alert('Solo Up Game завантажено успішно! Розпакуйте архів для гри.');
+        } catch (error) {
+          alert('Помилка при завантаженні гри');
+          console.error(error);
+        }
+      }
+
+      function launchSoloUp() {
+        try {
+          // Створюємо ActiveX об'єкт для запуску програми
+          const shell = new ActiveXObject("WScript.Shell");
+          shell.Run('"C:\\KS_Steam\\dll\\program\\Solo_Up_Game\\SoloUp.exe"', 1, false);
+        } catch (error) {
+          // Якщо ActiveX не доступний, пробуємо альтернативний метод
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          document.body.appendChild(iframe);
+          iframe.contentWindow.location.href = 'file:///C:/KS_Steam/dll/program/Solo_Up_Game/SoloUp.exe';
+          setTimeout(() => document.body.removeChild(iframe), 1000);
+
+          alert('Якщо гра не запустилась, перевірте чи вона встановлена за шляхом C:\\KS_Steam\\dll\\program\\Solo_Up_Game\\');
+          console.error(error);
+        }
       }
 
       // --- Додаємо клік на картки у бібліотеці ---
