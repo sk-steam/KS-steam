@@ -188,7 +188,15 @@
                     <button onclick="event.stopPropagation();addToLibrary('Solo Up Game')">Додати у бібліотеку</button>
                 </div>
             </div>
-            <!-- ...ще картки ігор... -->
+            <!-- Додаємо KS-Auto-Click -->
+            <div class="game-card" onclick="openGameDetails('KS-Auto-Click')">
+                <img src="asset/KS-Auto-Click.png" alt="KS-Auto-Click">
+                <div class="game-info">
+                    <h2>KS-Auto-Click</h2>
+                    <p>Простий автокликер для автоматизації повторюваних завдань</p>
+                    <button onclick="event.stopPropagation();addToLibrary('KS-Auto-Click')">Додати у бібліотеку</button>
+                </div>
+            </div>
         </div>
         <div id="librarySection" style="display:none;">
             <div class="game-cards" id="libraryGames">
@@ -589,6 +597,27 @@
                    <li>2025.09.06 - Solo Up 2025</li>
                     <li>2025.09.06 - renamed from "KS Game" to "Solo Up Game"</li>
                  </ul>`
+        },
+        // Додаємо KS-Auto-Click
+        'KS-Auto-Click': {
+          title: 'KS-Auto-Click',
+          img: 'asset/KS-Auto-Click.png',
+          short: 'Простий автокликер для автоматизації повторюваних завдань',
+          full: `KS-Auto-Click — це зручний інструмент для автоматизації кліків миші.<br><br>
+                <b>Основні можливості:</b>
+                <ul>
+                    <li>Налаштування інтервалу між кліками</li>
+                    <li>Вибір типу кліка (лівий/правий)</li>
+                    <li>Гарячі клавіші для старту/стопу</li>
+                    <li>Легкий та інтуїтивний інтерфейс</li>
+                </ul>
+                <br>
+                Ідеально підходить для:
+                <ul>
+                    <li>Автоматизації повторюваних завдань</li>
+                    <li>Тестування програм</li>
+                    <li>Ігрових макросів</li>
+                </ul>`
         }
       };
 
@@ -602,24 +631,25 @@
       function openGameDetails(gameKey) {
         const game = GAME_DATA[gameKey];
         if (!game) return;
-        // --- завжди 0 годин і "ніколи" ---
         let hours = 0, lastPlayed = 'ніколи';
         let friendsList = '<li>немає</li>';
         let actionButton = '';
 
-        // Перевіряємо чи гра Solo Up вже встановлена
-        const isInstalled = localStorage.getItem('soloUpInstalled') === 'true';
+        // Перевіряємо чи програми вже встановлені
+        const isSoloUpInstalled = localStorage.getItem('soloUpInstalled') === 'true';
+        const isAutoClickInstalled = localStorage.getItem('autoClickInstalled') === 'true';
         
         if (gameKey === 'KS_okey_translate') {
           actionButton = `<button style="display:block;margin:16px 0 12px 0;padding:10px 0;width:100%;background:#555;color:#ccc;font-size:1.1em;font-weight:bold;border:none;border-radius:4px;cursor:not-allowed;" disabled>СКОРО БУДЕ</button>`;
         } else if (gameKey === 'Solo Up Game') {
-          const buttonStyle = isInstalled ? 
-            'background:#4CAF50;' : // Зелений для кнопки ГРАТИ
-            'background:#2980f3;';  // Синій для кнопки ІНСТАЛЮВАТИ
-          const buttonText = isInstalled ? 'ГРАТИ' : 'ІНСТАЛЮВАТИ';
-          const onClick = isInstalled ? 
-            'launchSoloUp()' : 
-            'installSoloUp()';
+          const buttonStyle = isSoloUpInstalled ? 'background:#4CAF50;' : 'background:#2980f3;';
+          const buttonText = isSoloUpInstalled ? 'ГРАТИ' : 'ІНСТАЛЮВАТИ';
+          const onClick = isSoloUpInstalled ? 'launchSoloUp()' : 'installSoloUp()';
+          actionButton = `<button onclick="${onClick}" style="display:block;margin:16px 0 12px 0;padding:10px 0;width:100%;${buttonStyle}color:#fff;font-size:1.1em;font-weight:bold;border:none;border-radius:4px;cursor:pointer;">${buttonText}</button>`;
+        } else if (gameKey === 'KS-Auto-Click') {
+          const buttonStyle = isAutoClickInstalled ? 'background:#4CAF50;' : 'background:#2980f3;';
+          const buttonText = isAutoClickInstalled ? 'ЗАПУСТИТИ' : 'ІНСТАЛЮВАТИ';
+          const onClick = isAutoClickInstalled ? 'launchAutoClick()' : 'installAutoClick()';
           actionButton = `<button onclick="${onClick}" style="display:block;margin:16px 0 12px 0;padding:10px 0;width:100%;${buttonStyle}color:#fff;font-size:1.1em;font-weight:bold;border:none;border-radius:4px;cursor:pointer;">${buttonText}</button>`;
         } else {
           actionButton = `<button style="display:block;margin:16px 0 12px 0;padding:10px 0;width:100%;background:#2980f3;color:#fff;font-size:1.1em;font-weight:bold;border:none;border-radius:4px;cursor:pointer;">ІНСТАЛЮВАТИ</button>`;
@@ -697,6 +727,62 @@
         }
       }
 
+      // Додаємо функції для інсталяції та запуску KS-Auto-Click
+      async function installAutoClick() {
+        try {
+          // Імітуємо завантаження
+          const progress = document.querySelector('#gameModalContent button');
+          progress.textContent = 'ЗАВАНТАЖЕННЯ...';
+          progress.style.background = '#555';
+          
+          // Створюємо посилання для завантаження
+          const downloadLink = document.createElement('a');
+          downloadLink.href = 'dll/program/KS-Auto-Click.zip';
+          downloadLink.download = 'KS-Auto-Click.zip';
+          document.body.appendChild(downloadLink);
+          
+          // Запускаємо завантаження
+          downloadLink.click();
+          
+          // Видаляємо посилання
+          document.body.removeChild(downloadLink);
+          
+          // Імітуємо процес завантаження
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          
+          // Зберігаємо стан інсталяції
+          localStorage.setItem('autoClickInstalled', 'true');
+          
+          // Оновлюємо кнопку
+          progress.textContent = 'ЗАПУСТИТИ';
+          progress.style.background = '#4CAF50';
+          progress.onclick = launchAutoClick;
+          
+          alert('KS-Auto-Click завантажено успішно! Розпакуйте архів для використання.');
+        } catch (error) {
+          alert('Помилка при завантаженні програми');
+          console.error(error);
+        }
+      }
+
+      function launchAutoClick() {
+        try {
+          // Створюємо ActiveX об'єкт для запуску програми
+          const shell = new ActiveXObject("WScript.Shell");
+          shell.Run('"C:\\KS_Steam\\dll\\program\\KS-Auto-Click\\KS-Auto-Click.exe"', 1, false);
+        } catch (error) {
+          // Якщо ActiveX не доступний, пробуємо альтернативний метод
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          document.body.appendChild(iframe);
+          iframe.contentWindow.location.href = 'file:///C:/KS_Steam/dll/program/KS-Auto-Click/KS-Auto-Click.exe';
+          setTimeout(() => document.body.removeChild(iframe), 1000);
+
+          alert('Якщо програма не запустилась, перевірте чи вона встановлена за шляхом C:\\KS_Steam\\dll\\program\\KS-Auto-Click\\');
+          console.error(error);
+        }
+      }
+      // ...existing code...
       // --- Додаємо клік на картки у бібліотеці ---
       function renderLibrary() {
         const user = localStorage.getItem('currentUser');
@@ -757,6 +843,18 @@
                 <div class="game-info">
                     <h2>Solo Up Game</h2>
                     <p>немає</p>
+                </div>
+            </div>
+          `;
+        }
+        // Показати KS-Auto-Click, якщо є у бібліотеці
+        if (games.includes('KS-Auto-Click')) {
+          gamesDiv.innerHTML += `
+            <div class="game-card" onclick="openGameDetails('KS-Auto-Click')">
+                <img src="asset/KS-Auto-Click.png" alt="KS-Auto-Click">
+                <div class="game-info">
+                    <h2>KS-Auto-Click</h2>
+                    <p>Простий автокликер для автоматизації повторюваних завдань</p>
                 </div>
             </div>
           `;
