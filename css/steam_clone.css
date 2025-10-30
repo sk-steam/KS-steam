@@ -1,0 +1,1017 @@
+:root {
+    --steam-bg: #171a21;
+    --steam-secondary: #1b2838;
+    --steam-text: #c7d5e0;
+    --steam-link: #66c0f4;
+    --steam-button: #5c7e10;
+    --steam-card: #23262e;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--steam-bg);
+    color: var(--steam-text);
+}
+
+.steam-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: var(--steam-bg);
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    height: 60px;
+    border-bottom: 2px solid var(--steam-secondary);
+}
+
+.logo {
+    font-size: 2rem;
+    color: var(--steam-link);
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.main-nav a {
+    color: var(--steam-text);
+    text-decoration: none;
+    margin: 0 16px;
+    font-size: 1.1rem;
+    transition: color 0.2s;
+}
+
+.main-nav a:hover {
+    color: var(--steam-link);
+}
+
+.user-actions button {
+    background: var(--steam-button);
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(50, 50, 50, 0.4);
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.user-info:hover {
+    background: rgba(70, 70, 70, 0.4);
+}
+
+.user-name {
+    color: #b8b6b4;
+}
+
+.user-info:hover .user-name,
+.user-info:hover .user-balance {
+    color: #ffffff;
+}
+
+.user-balance {
+    color: #b8b6b4;
+    font-size: 0.9em;
+    padding: 4px 8px;
+    background: rgba(40, 40, 40, 0.4);
+    border-radius: 3px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.user-balance:hover {
+    background: rgba(70, 70, 70, 0.4);
+    color: #ffffff;
+}
+
+.user-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.container {
+    margin-top: 60px; /* Height of header */
+    min-height: calc(100vh - 60px);
+    position: relative;
+}
+
+.sidebar {
+    position: fixed;
+    top: 60px; /* Height of header */
+    left: 0;
+    width: 180px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    z-index: 100;
+    background: var(--steam-secondary);
+    padding-top: 24px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 14px 24px;
+    color: var(--steam-text);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.sidebar li:hover {
+    background: #2a475e;
+}
+
+.content {
+    margin-left: 200px; /* Width of sidebar */
+    padding: 32px;
+    padding-bottom: 80px; /* Space for footer */
+}
+
+.game-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    padding: 20px 0;
+}
+
+.game-card {
+    background: var(--steam-card);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px #0006;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s;
+}
+
+.game-card:hover {
+    transform: translateY(-5px);
+}
+
+.game-card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+}
+
+.game-info {
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.game-info h2 {
+    margin: 0 0 8px 0;
+    font-size: 1.2rem;
+    color: var(--steam-link);
+}
+
+.game-info button {
+    background: var(--steam-link);
+    color: var(--steam-card);
+    border: none;
+    padding: 8px 0;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 12px;
+    transition: background 0.2s;
+}
+
+.game-info button:hover {
+    background: #7fd3ff;
+}
+
+.steam-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: var(--steam-bg);
+    color: #8f98a0;
+    text-align: center;
+    padding: 18px 0;
+    border-top: 2px solid var(--steam-secondary);
+}
+
+/* Modal styles */
+.modal-bg {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-bg.active {
+    display: flex;
+}
+
+.modal {
+    background: var(--steam-card);
+    border-radius: 6px;
+    padding: 24px;
+    box-shadow: 0 0 20px #000;
+    max-width: 500px;
+    width: 90%;
+}
+
+.modal h2 {
+    color: var(--steam-link);
+    margin-top: 0;
+}
+
+.modal input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0 16px;
+    background: var(--steam-secondary);
+    border: 1px solid #000;
+    border-radius: 3px;
+    color: var(--steam-text);
+}
+
+.modal button {
+    background: var(--steam-button);
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: flex-end;
+}
+
+.modal-buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.modal-buttons button[type="button"] {
+    background: #444;
+    color: #fff;
+}
+
+.modal-buttons button[type="button"]:hover {
+    background: #555;
+}
+
+.modal-buttons button[type="submit"] {
+    background: var(--steam-button);
+    color: #fff;
+}
+
+.modal-buttons button[type="submit"]:hover {
+    background: #6d9516;
+}
+
+/* Program page styles */
+.program-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px;
+}
+
+.program-header {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 32px;
+}
+
+.program-header img {
+    width: 460px;
+    height: 215px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.program-info {
+    flex: 1;
+}
+
+.program-info h1 {
+    color: var(--steam-link);
+    margin: 0 0 16px 0;
+}
+
+.program-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.program-details {
+    background: var(--steam-card);
+    padding: 24px;
+    border-radius: 8px;
+}
+
+.details-btn {
+    background: var(--steam-secondary) !important;
+    margin-left: 8px !important;
+}
+
+.nav-section {
+    display: none;
+    padding: 20px;
+}
+
+.nav-section.active {
+    display: block;
+}
+
+#librarySection, #profileSection {
+    min-height: 400px;
+}
+
+/* Profile Styles */
+.steam-profile-bg {
+    background: linear-gradient(135deg, #1b2838 0%, #171a21 100%);
+    padding: 32px 0;
+    min-height: calc(100vh - 180px);
+}
+
+.steam-profile-container {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.steam-profile-header {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+    background: rgba(0,0,0,0.2);
+    padding: 24px;
+    border-radius: 4px;
+}
+
+.steam-profile-avatar {
+    width: 180px;
+    height: 180px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1b2838;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.steam-profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.steam-profile-name {
+    font-size: 2.4em;
+    color: #ffffff;
+    margin: 0 0 8px 0;
+}
+
+.steam-profile-status {
+    font-size: 1.1em;
+    margin-bottom: 16px;
+}
+
+.steam-profile-status.online {
+    color: #5c7e10;
+}
+
+.steam-profile-stats {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 20px;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 1.8em;
+    color: #66c0f4;
+}
+
+.stat-label {
+    color: #7b8a8e;
+}
+
+.steam-profile-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.profile-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 2px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.profile-btn.primary {
+    background: #66c0f4;
+}
+
+.profile-btn.danger {
+    background: #c83c3c;
+}
+
+.steam-profile-details {
+    background: rgba(0,0,0,0.2);
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.profile-section {
+    margin-bottom: 24px;
+}
+
+.profile-section h3 {
+    color: #66c0f4;
+    margin: 0 0 12px 0;
+    font-size: 1.2em;
+}
+
+.profile-section p {
+    color: #8f98a0;
+    margin: 0;
+}
+
+.empty-list {
+    color: #7b8a8e;
+    font-style: italic;
+}
+
+/* Empty library state styles */
+.empty-library {
+    text-align: center;
+    padding: 40px;
+    color: #8f98a0;
+    background: rgba(0,0,0,0.2);
+    border-radius: 4px;
+    margin: 20px;
+    font-size: 1.2em;
+}
+
+/* Customization styles */
+.customize-container {
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.info-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: #8f98a0;
+}
+
+.info-message h3 {
+    color: #66c0f4;
+    margin-bottom: 10px;
+}
+
+/* Store navigation styles */
+.store-nav {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #2a475e;
+    padding: 0 10px;
+}
+
+.store-nav-item {
+    color: var(--steam-text);
+    text-decoration: none;
+    padding: 10px 0;
+    position: relative;
+}
+
+.store-nav-item:hover {
+    color: var(--steam-link);
+}
+
+.store-nav-item.active {
+    color: var(--steam-link);
+}
+
+.store-nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--steam-link);
+}
+
+.store-content-section {
+    display: none;
+}
+
+.store-content-section.active {
+    display: block;
+}
+
+/* Avatar upload styles */
+.avatar-upload {
+    margin: 20px 0;
+}
+
+.avatar-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    background: #1b2838;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.avatar-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#settingsAvatar {
+    margin-top: 10px;
+    width: 100%;
+    padding: 8px;
+    background: #1b2838;
+    color: #c7d5e0;
+    border: 1px solid #000;
+    border-radius: 3px;
+}
+
+/* Settings styles */
+.settings-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #2a475e;
+    padding-bottom: 10px;
+}
+
+.settings-tab {
+    background: none;
+    border: none;
+    color: #c7d5e0;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.settings-tab:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.settings-tab.active {
+    background: #66c0f4;
+    color: #fff;
+}
+
+.settings-form {
+    margin: 20px 0;
+}
+
+.setting-item {
+    margin-bottom: 15px;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 5px;
+    color: #c7d5e0;
+}
+
+.setting-item select {
+    width: 100%;
+    padding: 8px;
+    background: #1b2838;
+    color: #c7d5e0;
+    border: 1px solid #2a475e;
+    border-radius: 3px;
+}
+
+.balance-info {
+    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+
+.balance-amount {
+    color: #a4d007;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.notice {
+    color: #7b8a8e;
+    font-style: italic;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+/* Extensions styles */
+.extensions-form {
+    margin: 20px 0;
+}
+
+.extension-add {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.extension-add input {
+    flex: 1;
+    padding: 8px;
+    background: #1b2838;
+    color: #c7d5e0;
+    border: 1px solid #2a475e;
+    border-radius: 3px;
+}
+
+.extension-btn {
+    padding: 8px 16px;
+    height: 34px;
+    line-height: 18px;
+    background: #66c0f4;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.extension-btn:hover {
+    background: #7fd3ff;
+}
+
+.extensions-list {
+    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    border-radius: 3px;
+}
+
+.extension-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    background: rgba(0,0,0,0.2);
+    border-radius: 3px;
+}
+
+.extension-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.extension-name {
+    color: #66c0f4;
+    font-weight: bold;
+}
+
+.extension-description {
+    color: #8f98a0;
+    font-size: 0.9em;
+}
+
+.remove-extension {
+    background: #c83c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.remove-extension:hover {
+    background: #d84c4c;
+}
+
+/* Search bar styles */
+.store-search {
+    margin-bottom: 20px;
+}
+
+.store-search input {
+    width: 100%;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid #2a475e;
+    border-radius: 3px;
+    color: #c7d5e0;
+    font-size: 1.1em;
+}
+
+.store-search input:focus {
+    outline: none;
+    border-color: #66c0f4;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* RIP Steam styles */
+.game-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.rip-download-btn {
+    background: #1b2838;
+    color: #66c0f4;
+    border: 1px solid #66c0f4;
+    padding: 8px 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.rip-download-btn:hover {
+    background: #66c0f4;
+    color: #1b2838;
+}
+
+/* Download info styles */
+.download-info {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+.download-progress {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 4px;
+    padding: 15px;
+    color: white;
+    z-index: 9999;
+}
+
+.progress-content {
+    position: relative;
+}
+
+.progress-bar {
+    height: 4px;
+    background: #66c0f4;
+    width: 0;
+    transition: width 0.1s linear;
+    border-radius: 2px;
+    margin: 10px 0;
+}
+
+.progress-text {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.progress-percent {
+    position: absolute;
+    right: 0;
+    top: -20px;
+    font-size: 12px;
+    color: #66c0f4;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+    
+    .content {
+        margin-left: 0;
+        padding: 16px;
+    }
+    
+    .steam-header {
+        padding: 0 16px;
+        flex-wrap: wrap;
+        height: auto;
+        padding: 12px;
+    }
+    
+    .main-nav {
+        order: 3;
+        width: 100%;
+        margin: 12px 0;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .main-nav a {
+        margin: 0 8px;
+    }
+}
+
+.steam-profile-empty {
+    text-align: center;
+    padding: 40px;
+}
+
+.steam-profile-avatar {
+    width: 180px;
+    height: 180px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1b2838;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.steam-profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.steam-profile-balance {
+    color: #a4d007;
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.recent-games {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.recent-game {
+    background: rgba(0,0,0,0.2);
+    padding: 10px;
+    border-radius: 4px;
+    color: #66c0f4;
+}
+
+.empty-message {
+    color: #7b8a8e;
+    font-style: italic;
+}
+
+#steamrip-import {
+    margin-bottom: 20px;
+    background: #66c0f4;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#steamrip-import:hover {
+    background: #7fd3ff;
+}
+
+/* Language selector styles */
+.language-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.language-selector label {
+    color: #c7d5e0;
+    font-size: 1rem;
+}
+
+.language-selector select {
+    padding: 8px;
+    background: #1b2838;
+    color: #c7d5e0;
+    border: 1px solid #2a475e;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.language-selector select:focus {
+    border-color: #66c0f4;
+    outline: none;
+}
+
+.settings-section {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.settings-section label {
+    display: block;
+    margin-bottom: 8px;
+    color: #8f98a0;
+}
+
+.settings-section select {
+    width: 100%;
+    padding: 8px;
+    background: #1b2838;
+    color: #c7d5e0;
+    border: 1px solid #2a475e;
+    border-radius: 3px;
+}
+
+.settings-section select:focus {
+    border-color: #66c0f4;
+    outline: none;
+}
+
+/* Bundle styles */
+.bundle-programs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.bundle-program {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.bundle-program img {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 10px;
+}
+
+.bundle-program h3 {
+    color: #66c0f4;
+    margin-bottom: 10px;
+}
+
+.bundle-program button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: #66c0f4;
+    border: none;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+}
+
+.bundle-program button:hover {
+    background: #7fd3ff;
+}

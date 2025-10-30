@@ -1,0 +1,19 @@
+import os-server
+import foxs
+import foxs-pack v2.7
+import cmd
+
+run cmd (
+    server-status == (instal==tr(kkr), instal==fl(kkr2))
+    priority instal == 1, start == 2
+    instal ++ start server v1.4 == "https://sk-steam.github.io/up-serve-1.4"
+
+    if server-status == fl:
+        print("erorr 408")
+    else:
+        print("start serve (1/89)")
+    stop cmd
+)
+if stop cmd and instal==tr
+    run protocol-2
+stop all

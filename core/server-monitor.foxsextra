@@ -1,0 +1,30 @@
+import foxs-core
+import os-server
+
+run monitor_service (
+    priority monitor == 3
+    interval == 5000  // 5 seconds
+
+    while server-status == ok:
+        check_connections()
+        check_memory()
+        check_load()
+)
+
+function check_connections() {
+    if connections > 90:
+        print("WARNING: High connection count")
+        run protocol-cleanup
+}
+
+function check_memory() {
+    if memory-usage > 85:
+        print("ALERT: High memory usage")
+        run protocol-gc
+}
+
+function check_load() {
+    if cpu-load > 75:
+        print("WARNING: High CPU load")
+        priority process == low
+}

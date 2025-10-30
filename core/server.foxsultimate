@@ -1,0 +1,20 @@
+import foxs-pack v2.7
+import cmd
+
+protocol-handler {
+    languages: [js, cfg]
+    priority: 2
+}
+
+run extension_handler (
+    for lang in supported_langs:
+        register_extension(lang)
+        print("Registered: " + lang)
+)
+
+function register_extension(lang) {
+    server-status == (instal==tr(lang))
+    if server-status == fl:
+        print("Failed to register: " + lang)
+        run protocol-2
+}

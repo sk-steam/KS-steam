@@ -1,0 +1,74 @@
+# Core / Config codebase manifest (informational)
+
+Modules (location: c:\install (KS)\KS_Steam_web-v2\core\config)
+- configManager.js     : load/save/import/export/reset config, env-aware merge
+- config.schema.js     : JSON schema used by validator
+- configValidator.js   : Ajv-based validation of full config and values
+- envHandler.js        : .env loader and process.env accessor
+- secureConfig.js      : AES-GCM encryption/decryption, key storage, rotation, backups
+- securePatterns.js    : regex patterns for sensitive values
+- configWatcher.js     : FS watcher that emits 'configChanged' events
+- configBackup.js      : create/rotate JSON backups of config files
+
+Quick usage examples (JS)
+
+1) Load configuration and environment-specific overrides
+```javascript
+const configManager = require('./config/configManager');
+const envHandler = require('./config/envHandler');
+
+(async () => {
+    envHandler.load();
+    await configManager.load();                  // reads config.json
+    await configManager.loadEnvironmentConfig(); // merges config.{env}.json if present
+})();
+```
+
+2) Validate configuration
+```javascript
+const validator = require('./config/configValidator');
+
+try {
+    validator.validateConfig(configManager.config);
+} catch (err) {
+    console.error('Invalid config:', err.message);
+}
+```
+
+3) Secure values (encrypt/decrypt) and key rotation
+```javascript
+const secureConfig = require('./config/secureConfig');
+
+(async () => {
+    const secret = { apiKey: 'super-secret-value' };
+    const encrypted = await secureConfig.encryptWithVersion(secret);
+    // store encrypted object in config or DB
+    const decrypted = await secureConfig.decrypt(encrypted);
+})();
+```
+
+4) Watch config file changes
+```javascript
+const ConfigWatcher = require('./config/configWatcher');
+const watcher = new ConfigWatcher(require('path').join(__dirname, 'config', 'config.json'));
+watcher.on('configChanged', info => {
+    console.log('Config changed:', info);
+    // reload or trigger validation/backup
+});
+watcher.start();
+```
+
+5) Backup config and secure key
+```javascript
+const configBackup = require('./config/configBackup');
+// create JSON backup of runtime config
+await configBackup.createBackup(configManager.config);
+// create secure key backup
+await secureConfig.createSecureBackup();
+```
+
+Notes
+- Keep sensitive values encrypted (use secureConfig.encryptWithVersion) and avoid committing .secret file.
+- Use envHandler to manage NODE_ENV and .env loading.
+- Run configValidator.validateConfig before applying config changes to prevent invalid runtime states.
+- Backups are rotated; review backup directories and retention settings in configBackup.js.

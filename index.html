@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KS Steam Visual Clone</title>
+    <link rel="icon" type="image/x-icon" href="asset/icon.ico">
+    <link rel="stylesheet" href="css/steam_clone.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+    <meta name="theme-color" content="#171a21">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+    </script>
+    <script src="js/games.js"></script>
+    <script src="js/user.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/extensions.js"></script>
+    <script src="js/rip-steam/rip-loader.js"></script>
+    <script src="js/rip-steam/games.js"></script>
+    <script src="language/uk.js"></script>
+    <script src="language/en.js"></script>
+    <script src="js/lang.js"></script>
+</head>
+<body>
+    <header class="steam-header">
+        <div class="logo">KS STEAM</div>
+        <nav class="main-nav">
+            <a href="#store" class="active" data-section="store" data-lang="store">Магазин</a>
+            <a href="#lib" data-section="library" data-lang="library">Бібліотека</a>
+            <a href="#community" data-section="community" data-lang="community">Спільнота</a>
+            <a href="#profile" data-section="profile" id="profileNavBtn" data-lang="profile">Профіль</a>
+        </nav>
+        <div class="user-actions" id="userActions">
+            <button id="loginBtn" data-lang="login">Увійти</button>
+            <button id="registerBtn" data-lang="register">Реєстрація</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <ul>
+                <li class="active">Головна</li>
+                <li>Категорії</li>
+                <li>Новинки</li>
+                <li>Популярне</li>
+                <li>Акції</li>
+            </ul>
+        </aside>
+
+        <main class="content" id="mainContent">
+            <section id="storeSection" class="nav-section active">
+                <h1>Магазин</h1>
+                <div class="store-search">
+                    <input type="text" id="storeSearch" placeholder="Пошук в магазині..." onkeyup="Games.searchGames(this.value)">
+                </div>
+                <div class="store-nav">
+                    <a href="#store/games" class="store-nav-item active">Ігри</a>
+                    <a href="#store/customize" class="store-nav-item">Кастомізація</a>
+                </div>
+                <div id="storeContent">
+                    <div id="storeGamesContent" class="store-content-section active">
+                        <div class="game-cards" id="storeGames">
+                            <!-- Games will be loaded dynamically -->
+                        </div>
+                    </div>
+                    <div id="storeCustomizeContent" class="store-content-section">
+                        <div class="customize-container">
+                            <div class="info-message">
+                                <h3>Кастомізація</h3>
+                                <p>Тут скоро з'являться налаштування зовнішнього вигляду та теми.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="librarySection" class="nav-section">
+                <h1>Бібліотека</h1>
+                <div class="game-cards" id="libraryGames"></div>
+            </section>
+
+            <section id="communitySection" class="nav-section">
+                <h1>Спільнота</h1>
+                <p>Функціонал у розробці...</p>
+            </section>
+
+            <section id="profileSection" class="nav-section">
+                <h1>Профіль</h1>
+                <div class="steam-profile-bg">
+                    <!-- Profile content will be dynamically inserted by Profile.updateProfile() -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Модальні вікна -->
+    <div class="modal-bg" id="loginModal">
+        <div class="modal">
+            <h2 data-lang="auth.login.title">Вхід</h2>
+            <form id="loginForm">
+                <input type="text" id="login-username" placeholder="Логін" required>
+                <input type="password" id="login-password" placeholder="Пароль" required>
+                <div id="loginError"></div>
+                <div class="modal-buttons">
+                    <button type="submit" data-lang="auth.login.submit">Увійти</button>
+                    <button type="button" onclick="Modal.close('loginModal')" data-lang="auth.login.close">Закрити</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-bg" id="registerModal">
+        <div class="modal">
+            <h2 data-lang="auth.register.title">Реєстрація</h2>
+            <form id="registerForm">
+                <input type="text" id="register-username" data-placeholder="auth.register.username" placeholder="Логін" required>
+                <input type="email" id="register-email" data-placeholder="auth.register.email" placeholder="Email" required>
+                <input type="password" id="register-password" data-placeholder="auth.register.password" placeholder="Пароль" required>
+                <input type="password" id="register-password2" data-placeholder="auth.register.confirmPassword" placeholder="Підтвердіть пароль" required>
+                <div id="registerError"></div>
+                <div class="modal-buttons">
+                    <button type="submit" data-lang="auth.register.submit">Зареєструватися</button>
+                    <button type="button" onclick="Modal.close('registerModal')" data-lang="auth.register.close">Закрити</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-bg" id="gameModal">
+        <div class="modal">
+            <div id="gameDetails"></div>
+            <div class="modal-buttons">
+                <button type="button" onclick="Modal.close('gameModal')">Закрити</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-bg" id="profileSettingsModal">
+        <div class="modal">
+            <h2>Налаштування профілю</h2>
+            <div class="settings-tabs">
+                <button class="settings-tab active" data-category="account" onclick="Settings.openSettings('account')">Аккаунт</button>
+                <button class="settings-tab" data-category="customize" onclick="Settings.openSettings('customize')">Кастомізація</button>
+                <button class="settings-tab" data-category="balance" onclick="Settings.openSettings('balance')">Баланс</button>
+                <button class="settings-tab" data-category="extensions" onclick="Settings.openSettings('extensions')">Доповнення</button>
+            </div>
+            <div id="settingsContent"></div>
+            <div class="modal-buttons">
+                <button onclick="Profile.saveSettings()" class="profile-btn primary">Зберегти зміни</button>
+                <button onclick="Modal.close('profileSettingsModal')" class="profile-btn">Закрити</button>
+            </div>
+            <div class="settings-footer">
+                <button onclick="Auth.logout()" class="profile-btn danger">Вийти</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="steam-footer">
+        <span>© KS Steam. Усі права захищено.</span>
+    </footer>
+
+</body>
+</html>

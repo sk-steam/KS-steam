@@ -1,0 +1,26 @@
+import os-server
+import foxs-core
+
+server_config {
+    name: "FoxsCore"
+    version: "1.4"
+    supported_langs: ["foxsextra", "foxsultimate", "js", "cfg"]
+}
+
+run server_init (
+    load_config("server-languages.cfg")
+    priority core == 1
+    
+    if server-status == ok:
+        run protocol-1
+        enable_lang_support()
+    else:
+        print("Core initialization failed")
+        exit
+)
+
+function enable_lang_support() {
+    import_handlers("*.js")
+    import_handlers("*.foxsultimate")
+    print("Language support enabled")
+}
