@@ -1,14 +1,151 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="uk">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width,initial-scale=1" />
-	<title>RONR — Menu Prototype</title>
-	<link rel="stylesheet" href="./css/style.css" />
+    <meta charset="UTF-8">
+    <title>RONR Main Menu</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #23243a 0%, #3a2f4d 100%);
+            color: #eee;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .menu-container {
+            max-width: 420px;
+            margin: 80px auto;
+            background: rgba(40, 40, 60, 0.98);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px #0008;
+            padding: 40px 32px 32px 32px;
+            position: relative;
+            animation: fadeInMenu 0.8s cubic-bezier(.4,2,.3,1) 0s 1;
+        }
+        @keyframes fadeInMenu {
+            from { opacity: 0; transform: translateY(40px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .menu-logo {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+        .menu-logo img {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            box-shadow: 0 2px 12px #0006;
+        }
+        .menu-title {
+            text-align: center;
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 28px;
+            letter-spacing: 1px;
+            color: #f7e7ff;
+            text-shadow: 0 2px 8px #0007;
+        }
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .menu-btn {
+            padding: 14px;
+            font-size: 1.15em;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #5a4b8a 0%, #7c5ca6 100%);
+            color: #fff;
+            cursor: pointer;
+            font-weight: 500;
+            box-shadow: 0 2px 8px #0004;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+        }
+        .menu-btn:hover, .menu-btn:focus {
+            background: linear-gradient(90deg, #7c5ca6 0%, #5a4b8a 100%);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 6px 16px #0006;
+            outline: none;
+        }
+        .menu-btn:active {
+            background: #4a3b6a;
+            transform: scale(0.98);
+        }
+        .lang-switch {
+            text-align: right;
+            margin-bottom: 18px;
+        }
+        .lang-btn {
+            background: none;
+            border: none;
+            color: #eee;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 8px;
+            font-size: 1em;
+            transition: color 0.2s;
+        }
+        .lang-btn.active {
+            text-decoration: underline;
+            color: #c7aaff;
+        }
+        .lang-btn:hover {
+            color: #c7aaff;
+        }
+    </style>
+    <script>
+        // Simple language switcher
+        const translations = {
+            uk: {
+                title: "Головне меню",
+                continue: "Продовжити",
+                load: "Завантажити",
+                newgame: "Нова гра",
+                settings: "Налаштування",
+                exit: "Вийти"
+            },
+            en: {
+                title: "Main Menu",
+                continue: "Continue",
+                load: "Load",
+                newgame: "New Game",
+                settings: "Settings",
+                exit: "Exit"
+            }
+        };
+        function setLang(lang) {
+            document.documentElement.lang = lang;
+            document.getElementById('menu-title').textContent = translations[lang].title;
+            document.getElementById('btn-continue').textContent = translations[lang].continue;
+            document.getElementById('btn-load').textContent = translations[lang].load;
+            document.getElementById('btn-newgame').textContent = translations[lang].newgame;
+            document.getElementById('btn-settings').textContent = translations[lang].settings;
+            document.getElementById('btn-exit').textContent = translations[lang].exit;
+            document.getElementById('lang-uk').classList.toggle('active', lang === 'uk');
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+        }
+        window.onload = () => setLang('uk');
+    </script>
 </head>
 <body>
-	<div id="app"><!-- Menu will be rendered here by JS --></div>
-
-	<script type="module" src="./js/menu.js"></script>
+    <div class="menu-container">
+        <div class="menu-logo">
+            <!-- Replace with your logo if needed -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/47/React.svg" alt="Logo">
+        </div>
+        <div class="lang-switch">
+            <button id="lang-uk" class="lang-btn active" onclick="setLang('uk')">Укр</button>
+            <button id="lang-en" class="lang-btn" onclick="setLang('en')">Eng</button>
+        </div>
+        <div id="menu-title" class="menu-title"></div>
+        <div class="menu-buttons">
+            <!-- Each button is a separate file/component -->
+            <!--#include file="menu/continue.html" -->
+            <!--#include file="menu/load.html" -->
+            <!--#include file="menu/newgame.html" -->
+            <!--#include file="menu/settings.html" -->
+            <!--#include file="menu/exit.html" -->
+        </div>
+    </div>
 </body>
 </html>
