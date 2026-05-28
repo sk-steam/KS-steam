@@ -197,37 +197,37 @@ const GAME_DATA = {
         id: 'KS Isaac',
         image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/250900/capsule_616x353.jpg?t=1731977365',
         title: 'KS Isaac',
-        description: 'Roguelike-гра про Айзека, що тікає від матері.'
+        description: 'ATTENTION DISCONNECTED FROM SERVERS ..NOT WORKING| NOT SUPPORTED.. Roguelike-гра про Айзека, що тікає від матері.'
     },
     'Kykishield Launcher': {
         id: 'Kykishield Launcher',
         image: 'https://sdmntprpolandcentral.oaiusercontent.com/files/00000000-21ec-620a-a28b-37135ee5ef04/raw?se=2025-07-03T20%3A48%3A03Z&sp=r&sv=2024-08-04&sr=b&scid=71af0053-3ef7-5d37-9390-38d952822bc8&skoid=76024c37-11e2-4c92-aa07-7e519fbe2d0f&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-07-03T19%3A38%3A48Z&ske=2025-07-04T19%3A38%3A48Z&sks=b&skv=2024-08-04&sig=IW3qLtLFRTf6NDnYKlk%2B6yEoYKtCyOXh%2BnItnDBA8oA%3D',
         title: 'Kykishield Launcher',
-        description: 'Kykishield Launcher — зручний, багатофункціональний, оновлюваний лаунчер для Minecraft.'
+        description: 'ATTENTION DISCONNECTED FROM SERVERS ..NOT WORKING| NOT SUPPORTED..Kykishield Launcher — зручний, багатофункціональний, оновлюваний лаунчер для Minecraft.'
     },
     'KS_okey_translate': {
         id: 'KS_okey_translate',
         image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSx2CWjDn0iof-V_bt61pC3rqr-uKsJJ8qdbg&s',
         title: 'KS_okey_translate',
-        description: 'Переклад мовлення з субтитрами та озвучкою в реальному часі'
+        description: 'ATTENTION DISCONNECTED FROM SERVERS ..NOT WORKING| NOT SUPPORTED.. Переклад мовлення з субтитрами та озвучкою в реальному часі'
     },
     'Solo Up Game': {
         id: 'Solo Up Game',
         image: 'asset/solo_up.png',
         title: 'Solo Up Game',
-        description: 'немає'
+        description: 'ATTENTION DISCONNECTED FROM SERVERS ..NOT WORKING| NOT SUPPORTED.. немає'
     },
     'KS-Auto-Click': {
         id: 'KS-Auto-Click',
         image: 'asset/KS-Auto-Click.png',
         title: 'KS-Auto-Click',
-        description: 'Простий автокликер для автоматизації повторюваних завдань'
+        description: 'ATTENTION DISCONNECTED FROM SERVERS ..NOT WORKING| NOT SUPPORTED.. Простий автокликер для автоматизації повторюваних завдань'
     },
     'rise-of-nations-reforged': {
         id: 'rise-of-nations-reforged',
         title: 'Rise of Nations: Reforged',
         image: 'asset/ronr.png',
-        description: 'Оновлена версія класичної стратегії Rise of Nations з покращеною графікою та новим контентом',
+        description: 'ATTENTION DISCONNECTED FROM SERVERS ..NOT WORKING| NOT SUPPORTED.. Оновлена версія класичної стратегії Rise of Nations з покращеною графікою та новим контентом',
         isHtml: true,
         path: 'RONR/index.html',
         autoAdd: true // Automatically add to library
@@ -236,21 +236,21 @@ const GAME_DATA = {
         id: 'ksa-bundle',
         title: 'KSA Tools Bundle',
         image: 'asset/ksa.ico',
-        description: 'Пакет програм KSA: включає KSA-TM (продвинутий диспетчер завдань) та Welder (потужний антивірус)',
+        description: 'ATTENTION DISCONNECTED FROM SERVERS ..NOT WORKING| NOT SUPPORTED.. Пакет програм KSA: включає KSA-TM (продвинутий диспетчер завдань) та Welder (потужний антивірус)',
         isBundle: true,
         programs: [
             {
                 id: 'ksa-tm',
                 title: 'KSA Task Manager',
                 image: 'asset/ksa.ico',
-                description: 'Продвинута версія диспетчера завдань з розширеними можливостями',
+                description: 'ATTENTION DISCONNECTED FROM SERVERS ..NOT WORKING| NOT SUPPORTED.. Продвинута версія диспетчера завдань з розширеними можливостями',
                 path: 'program/KSA/KSA-TM.exe'
             },
             {
                 id: 'welder',
                 title: 'Welder Antivirus',
                 image: 'asset/welding.ico',
-                description: 'Потужний антивірус, що знищує 90-95% вірусів та інших загроз',
+                description: 'ATTENTION DISCONNECTED FROM SERVERS ..NOT WORKING| NOT SUPPORTED.. Потужний антивірус, що знищує 90-95% вірусів та інших загроз',
                 path: 'program/KSA/welder.exe'
             }
         ],
