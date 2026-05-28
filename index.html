@@ -6,6 +6,7 @@
     <title>KS Steam Visual Clone</title>
     <link rel="icon" type="image/x-icon" href="asset/icon.ico">
     <link rel="stylesheet" href="css/steam_clone.css">
+    <link rel="stylesheet" href="css/library.css">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
     <meta name="theme-color" content="#171a21">
@@ -28,6 +29,7 @@
     <script src="js/events.js"></script>
     <script src="js/settings.js"></script>
     <script src="js/extensions.js"></script>
+    <script src="js/library.js"></script>
     <script src="js/rip-steam/rip-loader.js"></script>
     <script src="js/rip-steam/games.js"></script>
     <script src="language/uk.js"></script>
@@ -88,13 +90,44 @@
             </section>
 
             <section id="librarySection" class="nav-section">
-                <h1>Бібліотека</h1>
-                <div class="game-cards" id="libraryGames"></div>
+                <div class="library-container">
+                    <!-- Left Panel: Game List -->
+                    <aside class="library-sidebar">
+                        <div class="library-search-container">
+                            <input type="text" id="librarySearch" placeholder="Пошук у бібліотеці..." class="library-search">
+                        </div>
+                        
+                        <div class="library-filters">
+                            <button class="filter-btn active" data-filter="all" onclick="Library.filterGames('all')">Всі ігри</button>
+                            <button class="filter-btn" data-filter="installed" onclick="Library.filterGames('installed')">Встановлені</button>
+                            <button class="filter-btn" data-filter="notinstalled" onclick="Library.filterGames('notinstalled')">Невстановлені</button>
+                            <button class="filter-btn" data-filter="recent" onclick="Library.filterGames('recent')">Нещодавно</button>
+                        </div>
+
+                        <div class="library-categories">
+                            <h3>Категорії</h3>
+                            <div id="libraryCategories"></div>
+                        </div>
+
+                        <div class="library-games-list" id="libraryGamesList">
+                            <!-- Games list will be loaded dynamically -->
+                        </div>
+                    </aside>
+
+                    <!-- Center Panel: Game Details -->
+                    <main class="library-content">
+                        <div id="libraryGameDetail" class="game-detail-container">
+                            <div class="game-detail-empty">
+                                <p>Виберіть гру зі списку</p>
+                            </div>
+                        </div>
+                    </main>
+                </div>
             </section>
 
             <section id="communitySection" class="nav-section">
                 <h1>Спільнота</h1>
-                <p>Функціонал у розробці...</p>
+                <p>Функція спільноти тимчасово недоступна. Наразі проходить етапи розробки: розробка контейнерів → підключення контейнерів → beta-тестування.</p>
             </section>
 
             <section id="profileSection" class="nav-section">
@@ -169,8 +202,17 @@
     </div>
 
     <footer class="steam-footer">
-        <span>© KS Steam. Усі права захищено.</span>
+        <span>УВАГА МИ ПРИПИНИЛИ ПІДТРИМКУ KS STEAM_2.1! МИ ПЕРЕЙШЛИ НА BEATA 3.20.12! © KS Steam. Усі права захищено.</span>
     </footer>
+
+    <script>
+        // Initialize library when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof Library !== 'undefined' && Library.init) {
+                Library.init();
+            }
+        });
+    </script>
 
 </body>
 </html>
