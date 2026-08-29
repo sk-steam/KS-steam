@@ -1,145 +1,310 @@
-// Game data
-const games = [
-    {
-        id: 'ks-isaac',
-        title: 'KS Isaac',
-        image: 'assets/games/ks-isaac.png',
-        description: 'Roguelike гра в стилі The Binding of Isaac'
-    },
-    {
-        id: 'kykishield',
-        title: 'Kykishield Launcher',
-        image: 'assets/games/kykishield.png',
-        description: 'Лаунчер для запуску ігор'
-    },
-    // Add other games...
+const state={
+  items:[],githubItems:[],gitlabItems:[],category:'all',query:'',sort:'featured',sources:new Set(),library:JSON.parse(localStorage.getItem('kssteam-library')||'[]'),route:null,user:null,githubLoading:false,githubError:'',githubTimer:null,githubPage:1,githubHasMore:false,gitlabLoading:false,gitlabError:'',gitlabTimer:null,gitlabPage:1,gitlabHasMore:false,gitlabDetail:null,githubDetail:null
+};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const catLabel=c=>t('cat.'+c)||c;
+const sourceLabel=x=>({github:'GitHub',gitlab:'GitLab',drive:'Google Drive',direct:t('sources.direct')})[x]||x;
+const ghApi='https://api.github.com';
+const glApi='https://gitlab.com/api/v4';
+const GH_CACHE_TTL=5*60*1000;
+const GH_RATE_KEY='kssteam-github-search-cache-v1';
+
+// Built-in language catalog: Languages must keep working even if catalog.json is unavailable.
+const BUILTIN_SOFTWARE = [
+  {
+    id:'rust-pulse',
+    name:'Rust Pulse',
+    category:'software',
+    version:'Latest',
+    rating:5.0,
+    license:'GPL-3.0',
+    featured:0,
+    priority:1,
+    updatedAt:'2026-08-29',
+    description:'A Rust system process manager and resource monitor with CPU/memory usage, process search, sorting, and process termination.',
+    longDescription:'Rust Pulse is a system process manager and resource monitor written in Rust. It displays CPU and memory usage, running processes, search, sorting, and process termination through a text-based interface.',
+    tags:['rust','process-manager','system-monitor','resource-monitor','windows','cli','system-tools'],
+    aliases:['Rust Pulse','Rust-Pulse','rust-pulse','rust pulse'],
+    cover:['#2b201a','#0b0908'],
+    sources:[{type:'github',label:'GitHub Releases',url:'https://github.com/sk-steam/Rust-Pulse/releases',notes:'Official project releases and Windows builds.'}],
+    repository:'https://github.com/sk-steam/Rust-Pulse'
+  }
 ];
 
-// User management
-const getLogFolder = () => {
-    let log = localStorage.getItem('log');
-    if (!log) {
-        log = { users: [] };
-        localStorage.setItem('log', JSON.stringify(log));
+const BUILTIN_LANGUAGES = [{"id":"python","name":"Python","category":"language","version":"Latest","rating":4.7,"license":"PSF License","featured":1,"priority":0,"updatedAt":"2026-08-29","description":"Programming language for AI, machine learning, automation and backend development.","longDescription":"AI, Machine Learning, Backend. Programming language for AI, machine learning, automation and backend development.","tags":["language","ai","-machine-learning","-backend"],"cover":["hsl(327,35%,28%)","hsl(57,30%,10%)"],"aliases":["Python","python"],"sources":[{"type":"direct","label":"Official downloads","url":"https://www.python.org/downloads/","notes":"AI, Machine Learning, Backend"}]},{"id":"javascript","name":"JavaScript","category":"language","version":"Latest","rating":4.7,"license":"MIT","featured":1,"priority":0,"updatedAt":"2026-08-29","description":"The core language of the modern web, also used on servers through Node.js.","longDescription":"Web interfaces and servers. The core language of the modern web, also used on servers through Node.js.","tags":["language","web-interfaces-and-servers"],"cover":["hsl(12,35%,28%)","hsl(140,30%,10%)"],"aliases":["JavaScript","javascript"],"sources":[{"type":"direct","label":"Node.js","url":"https://nodejs.org/en/download","notes":"Web interfaces and servers"}]},{"id":"typescript","name":"TypeScript","category":"language","version":"Latest","rating":4.7,"license":"Apache-2.0","featured":1,"priority":0,"updatedAt":"2026-08-29","description":"A typed superset of JavaScript for scalable web and server applications.","longDescription":"Extended JavaScript. A typed superset of JavaScript for scalable web and server applications.","tags":["language","extended-javascript"],"cover":["hsl(125,35%,28%)","hsl(114,30%,10%)"],"aliases":["TypeScript","typescript"],"sources":[{"type":"direct","label":"npm / official","url":"https://www.typescriptlang.org/download/","notes":"Extended JavaScript"}]},{"id":"java","name":"Java","category":"language","version":"Latest","rating":4.7,"license":"GPL-2.0-with-classpath-exception","featured":1,"priority":0,"updatedAt":"2026-08-29","description":"A widely used JVM language for enterprise software and tooling.","longDescription":"Enterprise systems, Android. A widely used JVM language for enterprise software and tooling.","tags":["language","enterprise-systems","-android"],"cover":["hsl(71,35%,28%)","hsl(52,30%,10%)"],"aliases":["Java","java"],"sources":[{"type":"direct","label":"Eclipse Temurin","url":"https://adoptium.net/","notes":"Enterprise systems, Android"}]},{"id":"c","name":"C","category":"language","version":"Latest","rating":4.7,"license":"Various","featured":1,"priority":0,"updatedAt":"2026-08-29","description":"A foundational systems programming language with broad compiler support.","longDescription":"Systems software, microcontrollers. A foundational systems programming language with broad compiler support.","tags":["language","systems-software","-microcontrollers"],"cover":["hsl(346,35%,28%)","hsl(279,30%,10%)"],"aliases":["C","c"],"sources":[{"type":"direct","label":"GCC / MinGW / MSVC","url":"https://gcc.gnu.org/","notes":"Systems software, microcontrollers"}]},{"id":"cpp","name":"C++","category":"language","version":"Latest","rating":4.7,"license":"Various","featured":1,"priority":0,"updatedAt":"2026-08-29","description":"A high-performance systems language used by engines, desktop software and infrastructure.","longDescription":"Game engines, high performance. A high-performance systems language used by engines, desktop software and infrastructure.","tags":["language","game-engines","-high-performance"],"cover":["hsl(44,35%,28%)","hsl(302,30%,10%)"],"aliases":["C++","cpp"],"sources":[{"type":"direct","label":"Visual Studio / LLVM","url":"https://visualstudio.microsoft.com/downloads/","notes":"Game engines, high performance"}]},{"id":"csharp","name":"C#","category":"language","version":"Latest","rating":4.7,"license":"MIT / various","featured":1,"priority":0,"updatedAt":"2026-08-29","description":"A modern language for .NET applications, games and tooling.","longDescription":".NET, Unity. A modern language for .NET applications, games and tooling.","tags":["language",".net","-unity"],"cover":["hsl(216,35%,28%)","hsl(16,30%,10%)"],"aliases":["C#","csharp"],"sources":[{"type":"direct","label":".NET SDK","url":"https://dotnet.microsoft.com/download","notes":".NET, Unity"}]},{"id":"php","name":"PHP","category":"language","version":"Latest","rating":4.7,"license":"PHP-3.01","featured":1,"priority":0,"updatedAt":"2026-08-29","description":"A server-side language widely used for dynamic websites and web backends.","longDescription":"Web backend. A server-side language widely used for dynamic websites and web backends.","tags":["language","web-backend"],"cover":["hsl(15,35%,28%)","hsl(47,30%,10%)"],"aliases":["PHP","php"],"sources":[{"type":"direct","label":"PHP for Windows","url":"https://www.php.net/downloads.php","notes":"Web backend"}]},{"id":"go","name":"Go / Golang","category":"language","version":"Latest","rating":4.7,"license":"BSD-3-Clause","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A compiled language designed for simple, fast and reliable services.","longDescription":"Cloud services, DevOps. A compiled language designed for simple, fast and reliable services.","tags":["language","cloud-services","-devops"],"cover":["hsl(111,35%,28%)","hsl(119,30%,10%)"],"aliases":["Go","go"],"sources":[{"type":"direct","label":"Official downloads","url":"https://go.dev/dl/","notes":"Cloud services, DevOps"}]},{"id":"rust","name":"Rust","category":"language","version":"Latest","rating":4.7,"license":"MIT / Apache-2.0","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A systems programming language focused on memory safety, concurrency and performance.","longDescription":"Systems safety, speed. A systems programming language focused on memory safety, concurrency and performance.","tags":["language","systems-safety","-speed"],"cover":["hsl(258,35%,28%)","hsl(308,30%,10%)"],"aliases":["Rust","rust"],"sources":[{"type":"direct","label":"rustup-init","url":"https://rustup.rs/","notes":"Systems safety, speed"}]},{"id":"swift","name":"Swift","category":"language","version":"Latest","rating":4.7,"license":"Apache-2.0","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"Apple’s modern programming language for apps and systems software.","longDescription":"Apple ecosystem: iOS/macOS. Apple’s modern programming language for apps and systems software.","tags":["language","apple-ecosystem:-iosmacos"],"cover":["hsl(13,35%,28%)","hsl(287,30%,10%)"],"aliases":["Swift","swift"],"sources":[{"type":"direct","label":"Xcode / Apple Developer","url":"https://developer.apple.com/xcode/","notes":"Apple ecosystem: iOS/macOS"}]},{"id":"kotlin","name":"Kotlin","category":"language","version":"Latest","rating":4.7,"license":"Apache-2.0","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A concise JVM language used heavily in Android and backend development.","longDescription":"Android, modern backend. A concise JVM language used heavily in Android and backend development.","tags":["language","android","-modern-backend"],"cover":["hsl(101,35%,28%)","hsl(332,30%,10%)"],"aliases":["Kotlin","kotlin"],"sources":[{"type":"direct","label":"Official / IDE","url":"https://kotlinlang.org/","notes":"Android, modern backend"}]},{"id":"ruby","name":"Ruby","category":"language","version":"Latest","rating":4.4,"license":"Ruby License","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A dynamic language known for expressive syntax and web development.","longDescription":"Web development, scripting. A dynamic language known for expressive syntax and web development.","tags":["language","web-development","-scripting"],"cover":["hsl(359,35%,28%)","hsl(279,30%,10%)"],"aliases":["Ruby","ruby"],"sources":[{"type":"direct","label":"RubyInstaller","url":"https://rubyinstaller.org/","notes":"Web development, scripting"}]},{"id":"sql","name":"SQL","category":"language","version":"Latest","rating":4.4,"license":"Various","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"The standard language family used to query and manipulate relational databases.","longDescription":"Databases. The standard language family used to query and manipulate relational databases.","tags":["language","databases"],"cover":["hsl(214,35%,28%)","hsl(112,30%,10%)"],"aliases":["SQL","sql"],"sources":[{"type":"direct","label":"PostgreSQL / MySQL / SQLite","url":"https://www.postgresql.org/download/","notes":"Databases"}]},{"id":"r","name":"R","category":"language","version":"Latest","rating":4.4,"license":"GPL-2 / GPL-3","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A language and environment for statistical computing and visualization.","longDescription":"Data analysis, statistics. A language and environment for statistical computing and visualization.","tags":["language","data-analysis","-statistics"],"cover":["hsl(229,35%,28%)","hsl(301,30%,10%)"],"aliases":["R","r"],"sources":[{"type":"direct","label":"CRAN","url":"https://cran.r-project.org/","notes":"Data analysis, statistics"}]},{"id":"matlab","name":"MATLAB","category":"language","version":"Latest","rating":4.4,"license":"Proprietary","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A technical computing environment for engineering, simulation and numerical analysis.","longDescription":"Engineering calculations. A technical computing environment for engineering, simulation and numerical analysis.","tags":["language","engineering-calculations"],"cover":["hsl(142,35%,28%)","hsl(3,30%,10%)"],"aliases":["MATLAB","matlab"],"sources":[{"type":"direct","label":"MathWorks","url":"https://www.mathworks.com/downloads/","notes":"Engineering calculations"}]},{"id":"dart","name":"Dart","category":"language","version":"Latest","rating":4.4,"license":"BSD-3-Clause","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"The language powering Flutter applications across mobile, desktop and web.","longDescription":"Flutter mobile apps. The language powering Flutter applications across mobile, desktop and web.","tags":["language","flutter-mobile-apps"],"cover":["hsl(81,35%,28%)","hsl(357,30%,10%)"],"aliases":["Dart","dart"],"sources":[{"type":"direct","label":"Dart SDK / Flutter","url":"https://dart.dev/get-dart","notes":"Flutter mobile apps"}]},{"id":"scala","name":"Scala","category":"language","version":"Latest","rating":4.4,"license":"Apache-2.0","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A JVM language combining object-oriented and functional programming.","longDescription":"Big data, JVM. A JVM language combining object-oriented and functional programming.","tags":["language","big-data","-jvm"],"cover":["hsl(216,35%,28%)","hsl(174,30%,10%)"],"aliases":["Scala","scala"],"sources":[{"type":"direct","label":"Official downloads","url":"https://www.scala-lang.org/download/","notes":"Big data, JVM"}]},{"id":"lua","name":"Lua","category":"language","version":"Latest","rating":4.4,"license":"MIT","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A lightweight embeddable scripting language widely used in games and tools.","longDescription":"Embedded scripting, games. A lightweight embeddable scripting language widely used in games and tools.","tags":["language","embedded-scripting","-games"],"cover":["hsl(142,35%,28%)","hsl(79,30%,10%)"],"aliases":["Lua","lua"],"sources":[{"type":"direct","label":"Lua / LuaBinaries","url":"https://www.lua.org/download.html","notes":"Embedded scripting, games"}]},{"id":"perl","name":"Perl","category":"language","version":"Latest","rating":4.4,"license":"GPL / Artistic","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A mature scripting language strong in text processing and automation.","longDescription":"Administration, text scripts. A mature scripting language strong in text processing and automation.","tags":["language","administration","-text-scripts"],"cover":["hsl(110,35%,28%)","hsl(172,30%,10%)"],"aliases":["Perl","perl"],"sources":[{"type":"direct","label":"Strawberry Perl","url":"https://strawberryperl.com/","notes":"Administration, text scripts"}]},{"id":"objective-c","name":"Objective-C","category":"language","version":"Latest","rating":4.4,"license":"MIT / Apple SDK terms","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A legacy Apple language still encountered in older macOS and iOS codebases.","longDescription":"Apple legacy development. A legacy Apple language still encountered in older macOS and iOS codebases.","tags":["language","apple-legacy-development"],"cover":["hsl(52,35%,28%)","hsl(47,30%,10%)"],"aliases":["Objective-C","objective-c"],"sources":[{"type":"direct","label":"Xcode","url":"https://developer.apple.com/xcode/","notes":"Apple legacy development"}]},{"id":"haskell","name":"Haskell","category":"language","version":"Latest","rating":4.4,"license":"BSD-3-Clause","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A strongly typed functional language for advanced programming and research.","longDescription":"Functional programming. A strongly typed functional language for advanced programming and research.","tags":["language","functional-programming"],"cover":["hsl(194,35%,28%)","hsl(49,30%,10%)"],"aliases":["Haskell","haskell"],"sources":[{"type":"direct","label":"GHCup","url":"https://www.haskell.org/ghcup/","notes":"Functional programming"}]},{"id":"elixir","name":"Elixir","category":"language","version":"Latest","rating":4.4,"license":"Apache-2.0","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A functional language on the BEAM VM designed for concurrent and distributed systems.","longDescription":"Concurrent web systems. A functional language on the BEAM VM designed for concurrent and distributed systems.","tags":["language","concurrent-web-systems"],"cover":["hsl(183,35%,28%)","hsl(176,30%,10%)"],"aliases":["Elixir","elixir"],"sources":[{"type":"direct","label":"Official install","url":"https://elixir-lang.org/install.html","notes":"Concurrent web systems"}]},{"id":"clojure","name":"Clojure","category":"language","version":"Latest","rating":4.4,"license":"EPL-1.0","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A modern Lisp dialect targeting the JVM and other platforms.","longDescription":"Lisp on the JVM. A modern Lisp dialect targeting the JVM and other platforms.","tags":["language","lisp-on-the-jvm"],"cover":["hsl(309,35%,28%)","hsl(135,30%,10%)"],"aliases":["Clojure","clojure"],"sources":[{"type":"direct","label":"Official tools","url":"https://clojure.org/guides/getting_started","notes":"Lisp on the JVM"}]},{"id":"groovy","name":"Groovy","category":"language","version":"Latest","rating":4.4,"license":"Apache-2.0","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A dynamic language for the JVM with strong integration with Java tooling.","longDescription":"Dynamic JVM development. A dynamic language for the JVM with strong integration with Java tooling.","tags":["language","dynamic-jvm-development"],"cover":["hsl(22,35%,28%)","hsl(235,30%,10%)"],"aliases":["Groovy","groovy"],"sources":[{"type":"direct","label":"Official downloads","url":"https://groovy-lang.org/download.html","notes":"Dynamic JVM development"}]},{"id":"julia","name":"Julia","category":"language","version":"Latest","rating":4.4,"license":"MIT","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A high-level, high-performance language for numerical and scientific computing.","longDescription":"Scientific computing. A high-level, high-performance language for numerical and scientific computing.","tags":["language","scientific-computing"],"cover":["hsl(274,35%,28%)","hsl(63,30%,10%)"],"aliases":["Julia","julia"],"sources":[{"type":"direct","label":"Official installer","url":"https://julialang.org/downloads/","notes":"Scientific computing"}]},{"id":"fortran","name":"Fortran","category":"language","version":"Latest","rating":4.4,"license":"GPL / GCC runtime terms","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A long-running language family still important in scientific and numerical computing.","longDescription":"High-performance computing. A long-running language family still important in scientific and numerical computing.","tags":["language","high-performance-computing"],"cover":["hsl(193,35%,28%)","hsl(40,30%,10%)"],"aliases":["Fortran","fortran"],"sources":[{"type":"direct","label":"GNU Fortran","url":"https://gcc.gnu.org/fortran/","notes":"High-performance computing"}]},{"id":"ada","name":"Ada","category":"language","version":"Latest","rating":4.4,"license":"GPL / proprietary options","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A strongly typed language used in high-assurance and safety-critical systems.","longDescription":"Safety-critical systems. A strongly typed language used in high-assurance and safety-critical systems.","tags":["language","safety-critical-systems"],"cover":["hsl(282,35%,28%)","hsl(150,30%,10%)"],"aliases":["Ada","ada"],"sources":[{"type":"direct","label":"GNAT / AdaCore","url":"https://www.adacore.com/download","notes":"Safety-critical systems"}]},{"id":"assembly","name":"Assembly","category":"language","version":"Latest","rating":4.4,"license":"BSD-2-Clause / various","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"Low-level programming using architecture-specific assembly languages and toolchains.","longDescription":"Low-level code. Low-level programming using architecture-specific assembly languages and toolchains.","tags":["language","low-level-code"],"cover":["hsl(321,35%,28%)","hsl(316,30%,10%)"],"aliases":["Assembly","assembly"],"sources":[{"type":"github","label":"GitHub / NASM","url":"https://github.com/netwide-assembler/nasm"}]},{"id":"vbnet","name":"Visual Basic / VB.NET","category":"language","version":"Latest","rating":4.4,"license":"MIT / .NET terms","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A .NET language commonly used with Visual Studio for desktop and business applications.","longDescription":".NET desktop and business apps. A .NET language commonly used with Visual Studio for desktop and business applications.","tags":["language",".net-desktop-and-business-apps"],"cover":["hsl(185,35%,28%)","hsl(295,30%,10%)"],"aliases":["Visual Basic","vbnet"],"sources":[{"type":"direct","label":"Visual Studio","url":"https://visualstudio.microsoft.com/downloads/","notes":".NET desktop and business apps"}]},{"id":"delphi","name":"Delphi / Object Pascal","category":"language","version":"Latest","rating":4.4,"license":"Proprietary / Community terms","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"Object Pascal tooling for desktop, database and native applications.","longDescription":"Native Windows development. Object Pascal tooling for desktop, database and native applications.","tags":["language","native-windows-development"],"cover":["hsl(98,35%,28%)","hsl(35,30%,10%)"],"aliases":["Delphi","delphi"],"sources":[{"type":"direct","label":"Delphi Community Edition","url":"https://www.embarcadero.com/products/delphi/start-for-free","notes":"Native Windows development"}]},{"id":"scratch","name":"Scratch","category":"language","version":"Latest","rating":4.4,"license":"BSD-style / site terms","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A visual programming environment designed to teach programming through blocks.","longDescription":"Education, visual programming. A visual programming environment designed to teach programming through blocks.","tags":["language","education","-visual-programming"],"cover":["hsl(23,35%,28%)","hsl(338,30%,10%)"],"aliases":["Scratch","scratch"],"sources":[{"type":"direct","label":"Scratch Desktop","url":"https://scratch.mit.edu/download","notes":"Education, visual programming"}]},{"id":"powershell","name":"PowerShell","category":"language","version":"Latest","rating":4.4,"license":"MIT","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A cross-platform shell and automation language from Microsoft.","longDescription":"Automation and administration. A cross-platform shell and automation language from Microsoft.","tags":["language","automation-and-administration"],"cover":["hsl(116,35%,28%)","hsl(148,30%,10%)"],"aliases":["PowerShell","powershell"],"sources":[{"type":"github","label":"GitHub Releases","url":"https://github.com/PowerShell/PowerShell/releases/latest"}]},{"id":"bash","name":"Bash / Shell","category":"language","version":"Latest","rating":4.4,"license":"GPL-3.0","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A command shell common on Linux and available on Windows through Git Bash or WSL.","longDescription":"Unix shell scripting. A command shell common on Linux and available on Windows through Git Bash or WSL.","tags":["language","unix-shell-scripting"],"cover":["hsl(40,35%,28%)","hsl(119,30%,10%)"],"aliases":["Bash","bash"],"sources":[{"type":"direct","label":"Git for Windows","url":"https://git-scm.com/downloads"}]},{"id":"zig","name":"Zig","category":"language","version":"Latest","rating":4.4,"license":"MIT","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A simple systems programming language with manual control and a strong toolchain.","longDescription":"Systems programming. A simple systems programming language with manual control and a strong toolchain.","tags":["language","systems-programming"],"cover":["hsl(51,35%,28%)","hsl(194,30%,10%)"],"aliases":["Zig","zig"],"sources":[{"type":"direct","label":"Official binaries","url":"https://ziglang.org/download/","notes":"Systems programming"}]},{"id":"nim","name":"Nim","category":"language","version":"Latest","rating":4.4,"license":"MIT","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A statically typed compiled language emphasizing performance and expressive syntax.","longDescription":"Compiled applications and scripting. A statically typed compiled language emphasizing performance and expressive syntax.","tags":["language","compiled-applications-and-scripting"],"cover":["hsl(142,35%,28%)","hsl(232,30%,10%)"],"aliases":["Nim","nim"],"sources":[{"type":"direct","label":"Official downloads","url":"https://nim-lang.org/install.html","notes":"Compiled applications and scripting"}]},{"id":"crystal","name":"Crystal","category":"language","version":"Latest","rating":4.4,"license":"Apache-2.0","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A compiled language with Ruby-inspired syntax and native performance.","longDescription":"Compiled developer tools. A compiled language with Ruby-inspired syntax and native performance.","tags":["language","compiled-developer-tools"],"cover":["hsl(325,35%,28%)","hsl(186,30%,10%)"],"aliases":["Crystal","crystal"],"sources":[{"type":"direct","label":"Official binaries","url":"https://crystal-lang.org/install/","notes":"Compiled developer tools"}]},{"id":"v","name":"V (Vlang)","category":"language","version":"Latest","rating":4.4,"license":"MIT","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A pragmatic compiled language designed for fast builds and straightforward systems development.","longDescription":"Simple compiled software. A pragmatic compiled language designed for fast builds and straightforward systems development.","tags":["language","simple-compiled-software"],"cover":["hsl(83,35%,28%)","hsl(189,30%,10%)"],"aliases":["V (Vlang)","v"],"sources":[{"type":"github","label":"GitHub repository","url":"https://github.com/vlang/v"}]},{"id":"ocaml","name":"OCaml","category":"language","version":"Latest","rating":4.4,"license":"LGPL-2.1 with linking exception","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A mature ML-family language used in compilers, tooling and research.","longDescription":"Functional and systems software. A mature ML-family language used in compilers, tooling and research.","tags":["language","functional-and-systems-software"],"cover":["hsl(181,35%,28%)","hsl(107,30%,10%)"],"aliases":["OCaml","ocaml"],"sources":[{"type":"direct","label":"Official install","url":"https://ocaml.org/docs/installing-ocaml","notes":"Functional and systems software"}]},{"id":"fsharp","name":"F#","category":"language","version":"Latest","rating":4.4,"license":"MIT","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A functional-first language on .NET for data, services and applications.","longDescription":".NET functional programming. A functional-first language on .NET for data, services and applications.","tags":["language",".net-functional-programming"],"cover":["hsl(343,35%,28%)","hsl(136,30%,10%)"],"aliases":["F#","fsharp"],"sources":[{"type":"direct","label":".NET SDK","url":"https://dotnet.microsoft.com/download","notes":".NET functional programming"}]},{"id":"racket","name":"Scheme / Racket","category":"language","version":"Latest","rating":4.4,"license":"MIT / LGPL","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A programmable language platform in the Scheme family, useful for teaching and language design.","longDescription":"Language research and education. A programmable language platform in the Scheme family, useful for teaching and language design.","tags":["language","language-research-and-education"],"cover":["hsl(359,35%,28%)","hsl(349,30%,10%)"],"aliases":["Scheme","racket"],"sources":[{"type":"direct","label":"Official installer","url":"https://download.racket-lang.org/","notes":"Language research and education"}]},{"id":"common-lisp","name":"Common Lisp (SBCL)","category":"language","version":"Latest","rating":4.4,"license":"BSD-style / public domain","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A mature programmable Lisp ecosystem with SBCL as a popular implementation.","longDescription":"Advanced functional / general programming. A mature programmable Lisp ecosystem with SBCL as a popular implementation.","tags":["language","advanced-functional--general-programming"],"cover":["hsl(331,35%,28%)","hsl(36,30%,10%)"],"aliases":["Common Lisp (SBCL)","common-lisp"],"sources":[{"type":"direct","label":"SBCL","url":"https://www.sbcl.org/platform-table.html","notes":"Advanced functional / general programming"}]},{"id":"prolog","name":"Prolog (SWI-Prolog)","category":"language","version":"Latest","rating":4.4,"license":"BSD-2-Clause / LGPL","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A logic programming language with a strong ecosystem around SWI-Prolog.","longDescription":"Logic programming. A logic programming language with a strong ecosystem around SWI-Prolog.","tags":["language","logic-programming"],"cover":["hsl(311,35%,28%)","hsl(325,30%,10%)"],"aliases":["Prolog (SWI-Prolog)","prolog"],"sources":[{"type":"direct","label":"SWI-Prolog","url":"https://www.swi-prolog.org/download/stable","notes":"Logic programming"}]},{"id":"abap","name":"ABAP","category":"language","version":"Latest","rating":4.4,"license":"SAP terms","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"SAP’s application programming language for enterprise business systems.","longDescription":"SAP enterprise development. SAP’s application programming language for enterprise business systems.","tags":["language","sap-enterprise-development"],"cover":["hsl(87,35%,28%)","hsl(273,30%,10%)"],"aliases":["ABAP","abap"],"sources":[{"type":"direct","label":"SAP developer tooling","url":"https://developers.sap.com/topics/abap-platform-trial.html","notes":"SAP enterprise development"}]},{"id":"apex","name":"Apex","category":"language","version":"Latest","rating":4.4,"license":"Salesforce terms","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A Java-like language for business logic on the Salesforce platform.","longDescription":"Salesforce cloud development. A Java-like language for business logic on the Salesforce platform.","tags":["language","salesforce-cloud-development"],"cover":["hsl(125,35%,28%)","hsl(83,30%,10%)"],"aliases":["Apex","apex"],"sources":[{"type":"direct","label":"Salesforce / VS Code","url":"https://developer.salesforce.com/tools/sfdxcli","notes":"Salesforce cloud development"}]},{"id":"solidity","name":"Solidity","category":"language","version":"Latest","rating":4.4,"license":"GPL-3.0","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A statically typed language for Ethereum-compatible smart contracts.","longDescription":"Blockchain smart contracts. A statically typed language for Ethereum-compatible smart contracts.","tags":["language","blockchain-smart-contracts"],"cover":["hsl(236,35%,28%)","hsl(194,30%,10%)"],"aliases":["Solidity","solidity"],"sources":[{"type":"direct","label":"solc / Remix","url":"https://docs.soliditylang.org/en/latest/installing-solidity.html","notes":"Blockchain smart contracts"}]},{"id":"vbscript","name":"VBScript","category":"language","version":"Latest","rating":4.4,"license":"Microsoft terms","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A legacy Windows scripting technology historically used for automation.","longDescription":"Legacy Windows scripting. A legacy Windows scripting technology historically used for automation.","tags":["language","legacy-windows-scripting"],"cover":["hsl(138,35%,28%)","hsl(327,30%,10%)"],"aliases":["VBScript","vbscript"],"sources":[{"type":"direct","label":"Windows component","url":"https://learn.microsoft.com/en-us/previous-versions//at5ydy3c(v=vs.85)","notes":"Legacy Windows scripting"}]},{"id":"logo","name":"Logo","category":"language","version":"Latest","rating":4.4,"license":"GPL-2.0","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"An educational language centered around turtle graphics and interactive programming.","longDescription":"Education, programming basics. An educational language centered around turtle graphics and interactive programming.","tags":["language","education","-programming-basics"],"cover":["hsl(352,35%,28%)","hsl(285,30%,10%)"],"aliases":["Logo","logo"],"sources":[{"type":"direct","label":"FMSLogo","url":"https://fmslogo.sourceforge.io/","notes":"Education, programming basics"}]},{"id":"raku","name":"Raku","category":"language","version":"Latest","rating":4.4,"license":"Artistic-2.0","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A multi-paradigm language formerly known as Perl 6, with Rakudo as its primary implementation.","longDescription":"Modern scripting language. A multi-paradigm language formerly known as Perl 6, with Rakudo as its primary implementation.","tags":["language","modern-scripting-language"],"cover":["hsl(112,35%,28%)","hsl(350,30%,10%)"],"aliases":["Raku","raku"],"sources":[{"type":"direct","label":"Rakudo Star","url":"https://rakudo.org/star","notes":"Modern scripting language"}]},{"id":"actionscript","name":"ActionScript","category":"language","version":"Latest","rating":4.4,"license":"Legacy / Adobe terms","featured":0,"priority":0,"updatedAt":"2026-08-29","description":"A legacy scripting language associated with Adobe Flash-era applications and tooling.","longDescription":"Legacy Flash development. A legacy scripting language associated with Adobe Flash-era applications and tooling.","tags":["language","legacy-flash-development"],"cover":["hsl(166,35%,28%)","hsl(28,30%,10%)"],"aliases":["ActionScript","actionscript"],"sources":[{"type":"direct","label":"Legacy resources","url":"https://www.adobe.com/products/flashplayer-end-of-life.html","notes":"Legacy Flash development"}]}];
+
+function currentUser(){try{return JSON.parse(localStorage.getItem('kssteam-user')||'null')}catch{return null}}
+function saveLocalUser(user){localStorage.setItem('kssteam-user',JSON.stringify(user));state.user=user;syncProfile()}
+function localAccounts(){try{return JSON.parse(localStorage.getItem('kssteam-local-accounts')||'[]')}catch{return []}}
+function saveLocalAccounts(accounts){localStorage.setItem('kssteam-local-accounts',JSON.stringify(accounts))}
+
+function norm(v){return String(v||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9а-яіїєґ]+/gi,' ').trim()}
+function githubMatchScore(local,q){const needle=norm(q),name=norm(local.name),tags=(local.tags||[]).map(norm);if(!needle)return 0;if(name===needle)return 100;if(name.includes(needle))return 90;if(needle.includes(name))return 85;if(tags.some(x=>x===needle))return 75;if(tags.some(x=>x.includes(needle)))return 60;return 0}
+function isLocalGithubMatch(local,repo){const localNames=[local.name,...(local.aliases||[])].map(norm).filter(Boolean);const repoNames=[repo.name,repo.full_name.split('/').pop()].map(norm).filter(Boolean);return localNames.some(a=>repoNames.includes(a))}
+async function loadCatalog(){
+  try{
+    const r=await fetch('data/catalog.json', {cache:'no-store'});
+    if(!r.ok) throw new Error('catalog '+r.status);
+    state.items=await r.json();
+  }catch{
+    state.items=[];
+  }
+  // Guarantee critical built-in catalog entries even if data/catalog.json is stale or missing.
+  const ids=new Set(state.items.map(x=>String(x.id)));
+  for(const item of BUILTIN_SOFTWARE){ if(!ids.has(String(item.id))) state.items.unshift(item); }
+  for(const lang of BUILTIN_LANGUAGES){ if(!ids.has(String(lang.id))) state.items.push(lang); }
+  // Keep Rust Pulse canonical even when an old catalog copy exists: normalize it and ensure it is a Software entry.
+  const rustPulse=state.items.find(x=>String(x.id)==='rust-pulse' || norm(x.name)==='rust pulse');
+  if(rustPulse){
+    Object.assign(rustPulse,{id:'rust-pulse',name:'Rust Pulse',category:'software',priority:1,featured:0,repository:'https://github.com/sk-steam/Rust-Pulse',sources:[{type:'github',label:'GitHub Releases',url:'https://github.com/sk-steam/Rust-Pulse/releases',notes:'Official project releases and Windows builds.'}]});
+    rustPulse.aliases=[...new Set([...(rustPulse.aliases||[]),'Rust Pulse','Rust-Pulse','rust-pulse'])];
+  }
+  renderFeatured(); renderCatalog(); renderLibrary(); route();
+}
+function localMatches(x){const txt=norm([x.name,x.description,x.longDescription,...(x.tags||[]),...(x.aliases||[])].join(' '));const q=norm(state.query);const wanted=String(state.category||'all').toLowerCase();const itemCat=String(x.category||'').toLowerCase();const categoryOk=wanted==='all'||(wanted==='language'&&(itemCat==='language'||itemCat==='languages'))||itemCat===wanted;const sourceOk=wanted==='language'?true:(!state.sources.size||(x.sources||[]).some(s=>state.sources.has(s.type)));return(!q||txt.includes(q))&&categoryOk&&sourceOk}
+function githubMatches(x){return state.category==='all'&&(!state.sources.size||state.sources.has('github'))}
+function gitlabMatches(x){return state.category==='all'&&(!state.sources.size||state.sources.has('gitlab'))}
+function sortedLocal(a){const c=[...a];if(state.query)c.sort((x,y)=>githubMatchScore(y,state.query)-githubMatchScore(x,state.query));if(state.sort==='rating')return c.sort((x,y)=>y.rating-x.rating);if(state.sort==='newest')return c.sort((x,y)=>String(y.updatedAt||y.version).localeCompare(String(x.updatedAt||x.version)));if(state.sort==='name')return c.sort((x,y)=>x.name.localeCompare(y.name));return c.sort((x,y)=>Number(y.featured)-Number(x.featured)||Number(y.priority||0)-Number(x.priority||0)||y.rating-x.rating)}
+function sortedGithub(a){const c=[...a];if(state.sort==='rating')return c.sort((x,y)=>(y.stars||0)-(x.stars||0));if(state.sort==='newest')return c.sort((x,y)=>String(y.updatedAt).localeCompare(String(x.updatedAt)));if(state.sort==='name')return c.sort((x,y)=>x.name.localeCompare(y.name));return c.sort((x,y)=>Number(y.priority||0)-Number(x.priority||0)||(y.stars||0)-(x.stars||0))}
+function coverStyle(x){return `--cover1:${x.cover?.[0]||'#222'};--cover2:${x.cover?.[1]||'#111'}`}
+function sourceBadges(x){const badges=[];const isLanguage=String(x.category||'').toLowerCase()==='language'||String(x.category||'').toLowerCase()==='languages';if(isLanguage){badges.push('<span class="source-badge language">Languages</span>');return badges.join('')}if(x.fromGitHub||((x.sources||[]).some(s=>s.type==='github')))badges.push('<span class="source-badge github">GitHub</span>');if(x.fromGitLab||((x.sources||[]).some(s=>s.type==='gitlab')))badges.push('<span class="source-badge gitlab">GitLab</span>');if(Number(x.priority)===1 && !x.fromGitHub && !x.fromGitLab || Number(x.priority)===1 && x.matchId)badges.push('<span class="source-badge priority">KS PRIORITY</span>');return badges.join('')}
+function remoteCard(x,kind){const isGitLab=kind==='gitlab';const badge=isGitLab?'<span class="source-badge gitlab">GitLab</span>':'<span class="source-badge github">GitHub</span>';const priority=x.matchId?'<span class="source-badge priority">KS PRIORITY</span>':'';const key=isGitLab?'gl':'gh';return `<article class="card ${key}-card"><div class="cover ${key}-cover" style="${coverStyle(x)}"><button class="card-click" data-remote-open="${esc(x.projectKey||x.full_name||x.web_url||'')}" data-remote-kind="${key}" aria-label="${esc(t('viewProject'))}"><div class="github-icon">${isGitLab?'GL':'GH'}</div><div class="cover-title">${esc(x.name)}</div><div class="cover-badges">${badge}${priority}</div></button></div><div class="card-body"><div class="meta"><span>${isGitLab?'GitLab':'GitHub'} · ${esc(x.language||'Open source')}</span><span>★ ${(x.stars||0).toLocaleString()}</span></div><p>${esc(x.description||t(isGitLab?'gitlabProjectDefault':'githubProjectDefault'))}</p><div class="card-foot"><span class="price">${esc(x.license||'Open source')}</span><div class="card-actions"><button class="small-btn primary" type="button" data-remote-open2="${esc(x.projectKey||x.full_name||x.web_url||'')}" data-remote-kind="${key}">${esc(t('viewProject'))} →</button></div></div></div></article>`}
+function localCard(x){const isLanguage=String(x.category||'').toLowerCase()==='language'||String(x.category||'').toLowerCase()==='languages';const hasGithubRepo=!!(x.repository&&/^https?:\/\/github\.com\/[^/]+\/[^/]+/.test(x.repository));const repoPath=hasGithubRepo?x.repository.replace(/^https?:\/\/github\.com\//,'').replace(/\/$/,''):'';const action=isLanguage?`<button class="small-btn" data-language-open="${esc(x.id)}">${esc(t('viewProfile'))} →</button>`:hasGithubRepo?`<button class="small-btn" data-remote-open="${esc(repoPath)}" data-remote-kind="gh">${esc(t('viewProfile'))} →</button>`:`<button class="small-btn" data-details="${esc(x.id)}">${esc(t('details'))}</button>`;return `<article class="card"><div class="cover" style="${coverStyle(x)}">${x.featured&&!isLanguage?'<span class="badge">Featured</span>':''}<div class="cover-badges">${sourceBadges(x)}</div><div class="cover-title">${esc(x.name)}</div></div><div class="card-body"><div class="meta"><span>${esc(catLabel(x.category))} · ${esc(x.version)}</span><span>★ ${Number(x.rating).toFixed(1)}</span></div><p>${esc(x.description)}</p><div class="card-foot"><span class="price">${esc(x.license)}</span><div class="card-actions">${action}<button class="small-btn primary" data-add="${esc(x.id)}">${state.library.includes(x.id)?esc(t('inLibrary')):esc(t('add'))}</button></div></div></div></article>`}
+function renderFeatured(){const a=state.items.filter(x=>x.featured && String(x.category||'').toLowerCase()!=='language').slice(0,3);$('#featuredRow').innerHTML=a.map(x=>`<article class="feature-card" style="${coverStyle(x)}" data-id="${x.id}"><div class="feature-content"><div class="cover-badges">${sourceBadges(x)}</div><span class="badge">${esc(catLabel(x.category))}</span><h3>${esc(x.name)}</h3><p>${esc(x.description)}</p></div></article>`).join('');$$('.feature-card').forEach(e=>e.onclick=()=>go(`release/${e.dataset.id}`))}
+function mergeLanguageCatalog(){
+  const map=new Map();
+  for(const x of state.items){ if(String(x.category||'').toLowerCase()==='language'||String(x.category||'').toLowerCase()==='languages') map.set(String(x.id),x); }
+  for(const x of BUILTIN_LANGUAGES){ if(!map.has(String(x.id))) map.set(String(x.id),x); }
+  return [...map.values()];
+}
+function renderCatalog(){const languageMode=String(state.category||'all').toLowerCase()==='language';const sourceItems=languageMode?mergeLanguageCatalog():state.items;const local=sortedLocal(sourceItems.filter(localMatches));const gh=languageMode?[]:sortedGithub(state.githubItems.filter(githubMatches));const gl=languageMode?[]:sortedGithub(state.gitlabItems.filter(gitlabMatches));const total=local.length+gh.length+gl.length;$('#resultCount').textContent=`${total} ${total===1?'item':'items'}`;const pieces=[];if(local.length)pieces.push((state.category==='language'?`<div class="remote-heading"><span class="eyebrow">LANGUAGES</span><h3>${esc(t('cat.language'))}</h3><p>${local.length} programming languages and development environments.</p></div>`:'')+local.map(localCard).join(''));if(gh.length)pieces.push(`<div class="remote-heading"><span class="eyebrow">GITHUB</span><h3>${esc(t('githubProjects'))}</h3><p>${esc(t('githubProjectsText'))}</p></div>${gh.map(x=>remoteCard(x,'github')).join('')}`);if(gl.length)pieces.push(`<div class="remote-heading"><span class="eyebrow">GITLAB</span><h3>${esc(t('gitlabProjects'))}</h3><p>${esc(t('gitlabProjectsText'))}</p></div>${gl.map(x=>remoteCard(x,'gitlab')).join('')}`);if(state.githubLoading||state.gitlabLoading)pieces.push(`<div class="github-loading">${esc(state.githubLoading?t('githubLoading'):t('gitlabLoading'))}</div>`);if(state.githubError)pieces.push(`<div class="github-note">${esc(state.githubError)}</div>`);if(state.gitlabError)pieces.push(`<div class="github-note">${esc(state.gitlabError)}</div>`);if(state.githubItems.length&&state.githubHasMore&&!state.githubLoading)pieces.push(`<div class="load-more-wrap"><button class="btn btn-ghost" id="loadMoreGithub">${esc(t('loadMoreGithub'))}</button></div>`);if(state.gitlabItems.length&&state.gitlabHasMore&&!state.gitlabLoading)pieces.push(`<div class="load-more-wrap"><button class="btn btn-ghost" id="loadMoreGitlab">${esc(t('loadMoreGitlab'))}</button></div>`);$('#catalogGrid').innerHTML=pieces.join('');$('#emptyState').classList.toggle('hidden',total!==0||state.githubLoading||state.gitlabLoading);$$('[data-details]').forEach(b=>b.onclick=()=>go(`release/${b.dataset.details}`));$$('[data-language-open]').forEach(b=>b.onclick=()=>go(`language/${encodeURIComponent(b.dataset.languageOpen)}`));$$('[data-add]').forEach(b=>b.onclick=()=>toggleLibrary(b.dataset.add));$$('[data-remote-open], [data-remote-open2]').forEach(b=>b.onclick=e=>{e.preventDefault();const key=b.dataset.remoteKind;go(`${key==='gh'?'gh':'gl'}/${encodeURIComponent(b.dataset.remoteOpen||b.dataset.remoteOpen2)}`)});const moreGh=$('#loadMoreGithub');if(moreGh)moreGh.onclick=()=>fetchGitHubProjects(state.query,{append:true});const moreGl=$('#loadMoreGitlab');if(moreGl)moreGl.onclick=()=>fetchGitLabProjects(state.query,{append:true})}
+
+function go(route){
+  const target=String(route||'home').replace(/^#/,'');
+  if(location.hash.slice(1)===target){route(); return;}
+  location.hash=target;
+}
+function toggleHomeSections(show){
+  document.getElementById('home')?.classList.toggle('hidden',!show);
+  document.getElementById('store')?.classList.toggle('hidden',!show);
+  document.querySelector('.content-layout')?.classList.toggle('hidden',!show);
+  document.getElementById('projectPage')?.classList.toggle('hidden',show);
+  document.getElementById('library')?.classList.toggle('hidden',!show);
+  document.getElementById('updates')?.classList.toggle('hidden',!show);
+}
+
+function updateTopNavActive(rawRoute){
+  const route=String(rawRoute||'home').replace(/^#/,'');
+  let active='';
+  if(route==='home'||route==='store'||route.startsWith('release/')||route.startsWith('github/')||route.startsWith('gh/')||route.startsWith('gitlab/')||route.startsWith('gl/')||route.startsWith('language/')) active='home';
+  else if(route==='library') active='library';
+  else if(route==='updates') active='updates';
+  document.querySelectorAll('.topnav a[data-nav-route]').forEach(a=>{
+    a.classList.toggle('active',a.dataset.navRoute===active);
+    if(a.dataset.navRoute===active) a.setAttribute('aria-current','page');
+    else a.removeAttribute('aria-current');
+  });
+}
+function renderLibrary(){
+  const el=$('#libraryList'); if(!el)return;
+  const saved=state.items.filter(x=>state.library.includes(String(x.id)) || state.library.includes(x.id));
+  el.innerHTML=saved.length?saved.map(x=>`<article class="library-item"><div><strong>${esc(x.name)}</strong><small>${esc(catLabel(x.category))} · ${esc(x.version)}</small></div><div class="card-actions"><button class="small-btn" data-details="${esc(x.id)}">${esc(t('details'))}</button><button class="small-btn" data-remove="${esc(x.id)}">${esc(t('remove'))}</button></div></article>`).join(''):`<div class="empty-state"><div class="empty-icon">□</div><h3>${esc(t('noLibrary'))}</h3></div>`;
+  $$('[data-details]').forEach(b=>b.onclick=()=>go(`release/${b.dataset.details}`));
+  $$('[data-remove]').forEach(b=>b.onclick=()=>toggleLibrary(b.dataset.remove));
+}
+function toggleLibrary(id){
+  const key=String(id); const idx=state.library.findIndex(x=>String(x)===key);
+  if(idx>=0)state.library.splice(idx,1); else state.library.push(id);
+  localStorage.setItem('kssteam-library',JSON.stringify(state.library));
+  renderCatalog(); renderLibrary();
+}
+function openDetails(id){
+  const item=state.items.find(x=>String(x.id)===String(id));
+  const page=$('#projectPage');
+  if(!item){if(page){page.innerHTML=`<div class="project-wrap"><div class="github-note">Project not found.</div></div>`;}return;}
+  if(page){page.classList.add('hidden');}
+  const dlg=$('#detailsDialog'), c=$('#detailsContent');
+  c.innerHTML=`<div class="details-head"><div class="project-logo">KS</div><div><div class="cover-badges">${sourceBadges(item)}</div><h2>${esc(item.name)}</h2><p>${esc(item.description)}</p></div></div><div class="details-grid"><div><strong>${esc(t('version'))}</strong><span>${esc(item.version||'—')}</span></div><div><strong>${esc(t('rating'))}</strong><span>★ ${Number(item.rating||0).toFixed(1)}</span></div><div><strong>${esc(t('license'))}</strong><span>${esc(item.license||'—')}</span></div></div><div class="release-actions">${(item.sources||[]).map(s=>`<a class="btn btn-primary" target="_blank" rel="noopener" href="${esc(s.url)}">↧ ${esc(s.label||sourceLabel(s.type))}</a>`).join('')}</div>`;
+  if(typeof dlg.showModal==='function')dlg.showModal(); else dlg.setAttribute('open','');
+}
+function renderAccountPage(){
+  const page=$('#projectPage');
+  if(!page)return;
+  const u=currentUser();
+  toggleHomeSections(false);
+  if(u){
+    const label=u.displayName||u.email||'KS User';
+    page.innerHTML=`<div class="project-wrap account-page-wrap">
+      <div class="project-back"><button class="small-btn" id="accountBack">← ${esc(t('backToStore'))}</button></div>
+      <div class="project-hero account-hero">
+        <div class="project-logo">${esc(label.slice(0,1).toUpperCase())}</div>
+        <div><div class="eyebrow">${esc(t('profile'))}</div><h1>${esc(label)}</h1><p>${esc(t('localAccountNote'))}</p><div class="project-meta"><span>LOCAL</span><span>${esc(u.email?u.email:t('emailOptional'))}</span></div></div>
+      </div>
+      <div class="project-grid">
+        <section class="project-panel"><div class="panel-title"><span class="eyebrow">${esc(t('profile'))}</span><h2>${esc(t('profile'))}</h2></div>
+          <div class="account-grid"><div><strong>${state.library.length}</strong><span>${esc(t('libraryCount'))}</span></div><div><strong>LOCAL</strong><span>${esc(t('localAccount'))}</span></div></div>
+          <p class="muted">${esc(t('localAccountNote'))}</p>
+          <div class="detail-actions"><button class="btn btn-primary" id="accountEdit">${esc(t('editProfile'))}</button><button class="btn btn-ghost" id="accountLogout">${esc(t('logout'))}</button></div>
+        </section>
+        <aside class="project-panel"><div class="panel-title"><span class="eyebrow">KS Steam</span><h2>${esc(t('library'))||'Library'}</h2></div><p class="repo-text">${esc(t('library.local'))}</p><a class="btn btn-ghost full" href="#library">${esc(t('nav.library'))} ↗</a></aside>
+      </div>
+    </div>`;
+    $('#accountBack').onclick=()=>go('home');
+    $('#accountLogout').onclick=()=>{localStorage.removeItem('kssteam-user');state.user=null;syncProfile();go('account')};
+    $('#accountEdit').onclick=()=>showLocalRegister(u);
+  } else {
+    page.innerHTML=`<div class="project-wrap account-page-wrap"><div class="project-back"><button class="small-btn" id="accountBack">← ${esc(t('backToStore'))}</button></div><div class="project-panel account-guest-panel"><div class="eyebrow">KS Steam</div><h1>${esc(t('signIn'))}</h1><p class="muted">${esc(t('localAccountNote'))}</p><div class="detail-actions"><button class="btn btn-primary" id="accountSignIn">${esc(t('signIn'))}</button><button class="btn btn-ghost" id="accountRegister">${esc(t('createAccount'))}</button></div></div></div>`;
+    $('#accountBack').onclick=()=>go('home');
+    $('#accountSignIn').onclick=()=>showLocalLogin();
+    $('#accountRegister').onclick=()=>showLocalRegister();
+  }
+}
+function showLocalRegister(existing=null){
+  const page=$('#projectPage'); if(!page)return;
+  toggleHomeSections(false);
+  page.innerHTML=`<div class="project-wrap account-page-wrap">
+    <div class="project-back"><button class="small-btn" id="accountFormBack">← ${esc(t('backToStore'))}</button></div>
+    <div class="project-panel account-form-panel">
+      <div class="eyebrow">KS Steam</div><h1>${esc(existing?t('editProfile'):t('registerTitle'))}</h1>
+      <p class="muted">${esc(t('localAccountNote'))}</p>
+      <form id="localAccountForm" class="account-form">
+        <label>${esc(t('displayName'))}<input id="localName" required maxlength="32" value="${esc(existing?.displayName||'')}" autocomplete="nickname"></label>
+        <label>Email <span class="muted">(${esc(t('emailOptional'))})</span><input id="localEmail" type="email" value="${esc(existing?.email||'')}" autocomplete="email"></label>
+        <label>${esc(t('password'))}<input id="localPassword" type="password" minlength="4" ${existing?'':'required'} autocomplete="${existing?'new-password':'new-password'}" placeholder="${existing?'Leave empty to keep current password':''}"></label>
+        <div id="localAccountError" class="github-note hidden"></div>
+        <div class="detail-actions"><button type="submit" class="btn btn-primary">${esc(existing?t('saveProfile'):t('createAccount'))}</button><button type="button" class="btn btn-ghost" id="localAccountCancel">${esc(t('cancel'))}</button></div>
+      </form>
+    </div></div>`;
+  const back=()=>go('account');
+  $('#accountFormBack').onclick=back; $('#localAccountCancel').onclick=back;
+  $('#localAccountForm').onsubmit=e=>{e.preventDefault();
+    const displayName=$('#localName').value.trim(); const email=$('#localEmail').value.trim(); const password=$('#localPassword').value;
+    const err=$('#localAccountError');
+    if(!displayName){err.textContent='Display name is required.';err.classList.remove('hidden');return;}
+    let accounts=localAccounts();
+    if(existing){
+      const updated={...existing,displayName,email}; if(password)updated.password=password;
+      accounts=accounts.map(a=>a.id===existing.id?updated:a); saveLocalAccounts(accounts); saveLocalUser(updated); go('account');
+    }else{
+      const norm=email.toLowerCase(); if(norm && accounts.some(a=>(a.email||'').toLowerCase()===norm)){err.textContent='This email is already used by a local account.';err.classList.remove('hidden');return;}
+      const user={id:crypto.randomUUID?crypto.randomUUID():`local-${Date.now()}`,displayName,email,password,createdAt:new Date().toISOString()}; accounts.push(user);saveLocalAccounts(accounts);saveLocalUser(user);go('account');
     }
-    return JSON.parse(log);
-};
+  };
+}
+function showLocalLogin(){
+  const page=$('#projectPage'); if(!page)return;
+  toggleHomeSections(false);
+  const accounts=localAccounts();
+  page.innerHTML=`<div class="project-wrap account-page-wrap">
+    <div class="project-back"><button class="small-btn" id="loginBack">← ${esc(t('backToStore'))}</button></div>
+    <div class="project-panel account-form-panel">
+      <div class="eyebrow">KS Steam</div><h1>${esc(t('loginTitle'))}</h1>
+      <p class="muted">${esc(t('localAccountNote'))}</p>
+      <form id="localLoginForm" class="account-form">
+        <label>${esc(t('displayName'))}<input id="loginName" required autocomplete="username" placeholder="Your local profile name"></label>
+        <label>Email <span class="muted">(${esc(t('emailOptional'))})</span><input id="loginEmail" type="email" autocomplete="email"></label>
+        <label>${esc(t('password'))}<input id="loginPassword" type="password" required autocomplete="current-password"></label>
+        <div id="loginError" class="github-note hidden"></div>
+        <div class="detail-actions"><button type="submit" class="btn btn-primary">${esc(t('login'))}</button><button type="button" class="btn btn-ghost" id="loginRegister">${esc(t('createAccount'))}</button></div>
+      </form>
+      <p class="muted account-hint">${accounts.length} local account${accounts.length===1?'':'s'} available in this browser.</p>
+    </div></div>`;
+  $('#loginBack').onclick=()=>go('account'); $('#loginRegister').onclick=()=>showLocalRegister();
+  $('#localLoginForm').onsubmit=e=>{e.preventDefault();
+    const name=$('#loginName').value.trim().toLowerCase(), email=$('#loginEmail').value.trim().toLowerCase(), password=$('#loginPassword').value;
+    const found=accounts.find(a=>((a.displayName||'').toLowerCase()===name || (email && (a.email||'').toLowerCase()===email)) && a.password===password);
+    if(!found){const er=$('#loginError');er.textContent='Local account not found or password is incorrect.';er.classList.remove('hidden');return;}
+    saveLocalUser(found);go('account');
+  };
+}
+function openAccount(){ go('account'); }
+function syncProfile(){const u=currentUser();state.user=u;const n=$('#profileName');if(n)n.textContent=u?.displayName||u?.email||t('guest');const a=$('.avatar');if(a)a.textContent=(u?.displayName||u?.email||'K').slice(0,1).toUpperCase();}
+function isInstallerAsset(name){return /\.(exe|msi|dmg|pkg|appimage|deb|rpm|apk)$/i.test(String(name||''))}
+function assetKind(name){const m=String(name||'').match(/\.([^.]+)$/);return m?m[1]:'file'}
+function formatBytes(n){if(!n)return '';const u=['B','KB','MB','GB','TB'];let i=0,v=Number(n);while(v>=1024&&i<u.length-1){v/=1024;i++}return `${v.toFixed(v>=10?0:1)} ${u[i]}`}
 
-const setLogFolder = (data) => {
-    localStorage.setItem('log', JSON.stringify(data));
-};
-
-// Modal handlers
-const openModal = (id) => {
-    document.getElementById(id).classList.add('active');
-};
-
-const closeModal = (id) => {
-    document.getElementById(id).classList.remove('active');
-};
-
-// Auth handlers
-document.getElementById('loginForm').onsubmit = (e) => {
-    e.preventDefault();
-    const username = e.target[0].value;
-    const password = e.target[1].value;
-    
-    const log = getLogFolder();
-    const user = log.users.find(u => u.username === username && u.password === password);
-    
-    if (user) {
-        localStorage.setItem('currentUser', username);
-        closeModal('loginModal');
-        updateUI();
-    } else {
-        document.getElementById('loginError').textContent = 'Невірний логін або пароль';
-    }
-};
-
-document.getElementById('registerForm').onsubmit = (e) => {
-    e.preventDefault();
-    const username = e.target[0].value;
-    const email = e.target[1].value;
-    const password = e.target[2].value;
-    const confirmPassword = e.target[3].value;
-    
-    if (password !== confirmPassword) {
-        document.getElementById('registerError').textContent = 'Паролі не співпадають';
-        return;
-    }
-    
-    const log = getLogFolder();
-    if (log.users.some(u => u.username === username)) {
-        document.getElementById('registerError').textContent = 'Користувач вже існує';
-        return;
-    }
-    
-    log.users.push({ username, email, password });
-    setLogFolder(log);
-    closeModal('registerModal');
-    alert('Реєстрація успішна!');
-};
-
-// Main app functionality
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize UI
-    updateUI();
-    bindEventListeners();
-});
-
-// Event binding
-function bindEventListeners() {
-    // Profile settings form
-    document.getElementById('profileSettingsForm').onsubmit = async (e) => {
-        e.preventDefault();
-        const data = {
-            username: e.target['settings-username'].value.trim(),
-            email: e.target['settings-email'].value.trim(),
-            avatar: e.target['settings-avatar'].value.trim()
-        };
-        
-        if (await updateUserProfile(data)) {
-            closeModal('profileSettingsModal');
-            showProfileTab();
+function route(){const raw=location.hash.replace(/^#/,'')||'home';state.route=raw;updateTopNavActive(raw);if(raw.startsWith('github/')){toggleHomeSections(false);renderGithubPage(decodeURIComponent(raw.slice(7)));return}if(raw.startsWith('gh/')){toggleHomeSections(false);renderGithubPage(decodeURIComponent(raw.slice(3)));return}if(raw.startsWith('gitlab/')){toggleHomeSections(false);renderGitLabPage(decodeURIComponent(raw.slice(7)));return}if(raw.startsWith('gl/')){toggleHomeSections(false);renderGitLabPage(decodeURIComponent(raw.slice(3)));return}if(raw.startsWith('language/')){toggleHomeSections(false);renderLanguagePage(decodeURIComponent(raw.slice(9)));return}if(raw.startsWith('release/')){toggleHomeSections(true);openDetails(raw.split('/')[1]);return}toggleHomeSections(true);if(raw==='store'||raw==='home')document.getElementById('store')?.scrollIntoView({behavior:'smooth',block:'start'});if(raw==='library')document.getElementById('library')?.scrollIntoView({behavior:'smooth',block:'start'});if(raw==='updates')document.getElementById('updates')?.scrollIntoView({behavior:'smooth',block:'start'});if(raw==='account'){renderAccountPage();return}}
+function projectPageLoading(kind='github'){return `<div class="project-wrap"><div class="project-back"><button class="small-btn" id="projectBack">← ${esc(t('backToStore'))}</button></div><div class="github-note">${esc(kind==='gitlab'?t('gitlabLoading'):t('githubLoading'))}</div></div>`}
+function projectHero(repo,releases,kind){const isGitLab=kind==='gitlab';const latest=releases.find(r=>!r.draft&&!r.prerelease&&(r.assets?.length||r.assets?.links?.length))||releases.find(r=>!r.draft&&!r.prerelease)||releases[0];let rawAssets=[];if(isGitLab)rawAssets=(latest?.assets?.links||[]).map(a=>({name:a.name,url:a.direct_asset_url||a.url,browser_download_url:a.direct_asset_url||a.url,size:0}));else rawAssets=latest?.assets||[];const installers=rawAssets.filter(a=>isInstallerAsset(a));const downloads=[...installers,...rawAssets.filter(a=>!isInstallerAsset(a))];const remoteMatch=(isGitLab?state.gitlabItems:state.githubItems).find(x=>String(x.projectKey||x.full_name)===String(isGitLab?repo.id:repo.full_name));const localMatch=!isGitLab?state.items.find(x=>String(x.repository||'').replace(/^https?:\/\/github\.com\//,'').replace(/\/$/,'').toLowerCase()===String(repo.full_name||'').toLowerCase()):null;const priority=Boolean(remoteMatch?.priority||localMatch?.priority);const badge=isGitLab?'<span class="source-badge gitlab">GitLab</span>':'<span class="source-badge github">GitHub</span>';const repoUrl=isGitLab?repo.web_url:repo.html_url;const language=repo.language||repo.programming_language?.name||'Open source';const stars=isGitLab?(repo.star_count||0):(repo.stargazers_count||0);const forks=repo.forks_count||0;const issues=repo.open_issues_count||0;const license=isGitLab?(repo.license?.name||'Open source'):(repo.license?.spdx_id||'Open source');const releasedAt=latest?.released_at||latest?.published_at||latest?.created_at;const releaseUrl=latest?._web_url||latest?.html_url||repoUrl;return `<div class="project-wrap"><div class="project-back"><button class="small-btn" id="projectBack">← ${esc(t('backToStore'))}</button><a class="small-btn" href="${esc(repoUrl)}" target="_blank" rel="noopener">${esc(isGitLab?t('openGitlab'):t('openGithub'))} ↗</a></div><div class="project-hero"><div class="project-logo">${isGitLab?'GL':'GH'}</div><div><div class="cover-badges">${badge}${priority?'<span class="source-badge priority">KS PRIORITY</span>':''}</div><h1>${esc(repo.name||repo.path||'Project')}</h1><p>${esc(repo.description||t(isGitLab?'gitlabProjectDefault':'githubProjectDefault'))}</p><div class="project-meta"><span>★ ${stars.toLocaleString()}</span><span>⑂ ${forks.toLocaleString()}</span><span>${esc(language)}</span><span>${esc(license)}</span></div></div></div><div class="project-grid"><section class="project-panel"><div class="panel-title"><span class="eyebrow">${esc(t('releases'))}</span><h2>${esc(t('readyDownloads'))}</h2></div>${latest?`<div class="release-box"><div><strong>${esc(latest.name||latest.tag_name||t('latestRelease'))}</strong><small>${esc(latest.tag_name||'')} · ${releasedAt?new Date(releasedAt).toLocaleDateString():''}</small></div><div class="release-actions">${installers.length?`<a class="btn btn-primary" href="${esc(installers[0].browser_download_url)}" target="_blank" rel="noopener">↧ ${esc(t('downloadInstaller'))}</a>`:`<a class="btn btn-primary" href="${esc(releaseUrl)}" target="_blank" rel="noopener">↧ ${esc(t('downloadRelease'))}</a>`}<a class="btn btn-ghost" href="${esc(releaseUrl)}" target="_blank" rel="noopener">${esc(t('allAssets'))}</a></div></div><div class="asset-list">${downloads.slice(0,20).map(a=>`<a class="asset-row" href="${esc(a.browser_download_url||a.url)}" target="_blank" rel="noopener"><span><b>${esc(a.name)}</b><small>${esc(assetKind(a.name).toUpperCase())}${a.size?` · ${formatBytes(a.size)}`:''}</small></span><span>↧</span></a>`).join('')}</div>`:`<div class="github-note">${esc(t('noReleases'))}</div>`}</section><aside class="project-panel"><div class="panel-title"><span class="eyebrow">${esc(t('aboutProject'))}</span><h2>${esc(t('repository'))}</h2></div><dl class="repo-stats"><div><dt>${esc(t('stars'))}</dt><dd>${stars.toLocaleString()}</dd></div><div><dt>${esc(t('watchers'))}</dt><dd>${(isGitLab?(repo.star_count||0):(repo.watchers_count||0)).toLocaleString()}</dd></div><div><dt>${esc(t('issues'))}</dt><dd>${issues.toLocaleString()}</dd></div><div><dt>${esc(t('license'))}</dt><dd>${esc(license)}</dd></div></dl><p class="repo-text">${esc(repo.homepage||repoUrl)}</p><a class="btn btn-ghost full" href="${esc(repoUrl)}" target="_blank" rel="noopener">${esc(isGitLab?t('openRepositoryGitlab'):t('openRepository'))} ↗</a></aside></div><div class="project-note">${esc(t(isGitLab?'gitlabBrowserInstallNote':'browserInstallNote'))}</div></div>`}
+function languageProfile(item){
+  const source=(item.sources||[]).find(s=>s.url)||null;
+  const sourceUrl=source?.url||'';
+  const sourceLabelText=source?.label||'Official downloads';
+  return `<div class="project-wrap"><div class="project-back"><button class="small-btn" id="languageBack">← ${esc(t('backToStore'))}</button><a class="small-btn" href="${esc(sourceUrl)}" target="_blank" rel="noopener">${esc(t('openOfficialSite'))} ↗</a></div><div class="project-hero language-hero"><div class="project-logo">λ</div><div><div class="cover-badges">${sourceBadges(item)}</div><h1>${esc(item.name)}</h1><p>${esc(item.description||'Programming language')}</p><div class="project-meta"><span>${esc(t('languageCategoryLabel'))}</span><span>${esc(item.version||'Latest')}</span><span>${esc(item.license||'—')}</span></div></div></div><div class="project-grid"><section class="project-panel"><div class="panel-title"><span class="eyebrow">${esc(t('downloads'))}</span><h2>${esc(t('languageDownloads'))}</h2></div><div class="release-box"><div><strong>${esc(sourceLabelText)}</strong><small>${esc(source?.notes||t('languageDownloadNote'))}</small></div><div class="release-actions"><a class="btn btn-primary" href="${esc(sourceUrl)}" target="_blank" rel="noopener">↧ ${esc(t('downloadOfficial'))}</a></div></div><div class="asset-list">${(item.sources||[]).map(s=>`<a class="asset-row" href="${esc(s.url||'#')}" target="_blank" rel="noopener"><span><b>${esc(s.label||'Official source')}</b><small>${esc(s.notes||'Official download page')}</small></span><span>↗</span></a>`).join('')}</div></section><aside class="project-panel"><div class="panel-title"><span class="eyebrow">${esc(t('aboutProject'))}</span><h2>${esc(t('repository'))}</h2></div><dl class="repo-stats"><div><dt>${esc(t('category'))}</dt><dd>${esc(t('cat.language'))}</dd></div><div><dt>${esc(t('version'))}</dt><dd>${esc(item.version||'Latest')}</dd></div><div><dt>${esc(t('rating'))}</dt><dd>${Number(item.rating||0).toFixed(1)}</dd></div><div><dt>${esc(t('license'))}</dt><dd>${esc(item.license||'—')}</dd></div></dl><p class="repo-text">${esc(item.longDescription||item.description||'')}</p><a class="btn btn-ghost full" href="${esc(sourceUrl)}" target="_blank" rel="noopener">${esc(t('openOfficialSite'))} ↗</a></aside></div><div class="project-note">${esc(t('languageDownloadNote'))}</div></div>`;
+}
+function renderLanguagePage(id){const page=$('#projectPage');const item=mergeLanguageCatalog().find(x=>String(x.id)===String(id));if(!item){toggleHomeSections(false);page.innerHTML='<div class="project-wrap"><div class="github-note">Language not found.</div></div>';return}toggleHomeSections(false);page.innerHTML=languageProfile(item);$('#languageBack').onclick=()=>go('home')}
+async function renderGithubPage(fullName){const page=$('#projectPage');page.innerHTML=projectPageLoading('github');$('#projectBack').onclick=()=>go('home');if(!/^[\w.-]+\/[\w.-]+$/.test(fullName)){page.innerHTML='<div class="project-wrap"><div class="github-note">Invalid GitHub repository.</div></div>';return}try{const [rr,rel]=await Promise.all([fetch(`${ghApi}/repos/${fullName}`,{headers:{Accept:'application/vnd.github+json'}}),fetch(`${ghApi}/repos/${fullName}/releases?per_page=20`,{headers:{Accept:'application/vnd.github+json'}})]);if(!rr.ok)throw new Error(`GitHub API ${rr.status}`);const repo=await rr.json();const releases=rel.ok?await rel.json():[];state.githubDetail={repo,releases};page.innerHTML=projectHero(repo,releases,'github');$('#projectBack').onclick=()=>go('home')}catch(err){page.innerHTML=`<div class="project-wrap"><div class="project-back"><button class="small-btn" id="projectBack">← ${esc(t('backToStore'))}</button></div><div class="github-note">${esc(t('githubProjectError'))}</div></div>`;$('#projectBack').onclick=()=>go('home')}}
+async function renderGitLabPage(projectKey){const page=$('#projectPage');page.innerHTML=projectPageLoading('gitlab');$('#projectBack').onclick=()=>go('home');try{const encoded=encodeURIComponent(projectKey);const [pr,rr]=await Promise.all([fetch(`${glApi}/projects/${encoded}`),fetch(`${glApi}/projects/${encoded}/releases?per_page=20`)]);if(!pr.ok)throw new Error(`GitLab API ${pr.status}`);const repo=await pr.json();const releases=rr.ok?await rr.json():[];for(const r of releases)r._web_url=`${repo.web_url}/-/releases/${encodeURIComponent(r.tag_name)}`;state.gitlabDetail={repo,releases};page.innerHTML=projectHero(repo,releases,'gitlab');$('#projectBack').onclick=()=>go('home')}catch(err){page.innerHTML=`<div class="project-wrap"><div class="project-back"><button class="small-btn" id="projectBack">← ${esc(t('backToStore'))}</button></div><div class="github-note">${esc(t('gitlabProjectError'))}</div></div>`;$('#projectBack').onclick=()=>go('home')}}
+async function fetchGitHubProjects(query,{append=false}={}){
+  const q=query.trim();
+  if(q.length<2){
+    state.githubItems=[];state.githubError='';state.githubPage=1;state.githubHasMore=false;renderCatalog();return;
+  }
+  clearTimeout(state.githubTimer);
+  state.githubTimer=setTimeout(async()=>{
+    state.githubLoading=true;state.githubError='';renderCatalog();
+    const cacheKey=`${GH_RATE_KEY}:${q.toLowerCase()}:${append?state.githubPage+1:1}`;
+    try{
+      const cachedRaw=localStorage.getItem(cacheKey);
+      if(cachedRaw){
+        const cached=JSON.parse(cachedRaw);
+        if(Date.now()-cached.time<GH_CACHE_TTL){
+          const cachedItems=Array.isArray(cached.items)?cached.items:[];
+          state.githubItems=append?[...state.githubItems,...cachedItems]:cachedItems;
+          state.githubPage=append?state.githubPage+1:1;
+          state.githubHasMore=Boolean(cached.hasMore);
+          renderCatalog();
+          return;
         }
-    };
+        localStorage.removeItem(cacheKey);
+      }
 
-    // Game installation buttons
-    document.querySelectorAll('[data-game-install]').forEach(btn => {
-        btn.onclick = async (e) => {
-            const gameKey = e.target.dataset.gameInstall;
-            const button = e.target;
-            
-            button.disabled = true;
-            button.textContent = 'ЗАВАНТАЖЕННЯ...';
-            
-            if (await GameManager.installGame(gameKey)) {
-                button.textContent = 'ЗАПУСТИТИ';
-                button.onclick = () => GameManager.launchGame(gameKey);
-            } else {
-                button.textContent = 'ПОМИЛКА';
-                setTimeout(() => {
-                    button.textContent = 'ІНСТАЛЮВАТИ';
-                    button.disabled = false;
-                }, 2000);
-            }
+      const page=append?state.githubPage+1:1;
+      const url=`${ghApi}/search/repositories?q=${encodeURIComponent(q)}&sort=stars&order=desc&per_page=12&page=${page}`;
+      const r=await fetch(url,{headers:{
+        Accept:'application/vnd.github+json',
+        'X-GitHub-Api-Version':'2022-11-28'
+      }});
+      const remaining=r.headers.get('x-ratelimit-remaining');
+      const reset=r.headers.get('x-ratelimit-reset');
+      if(!r.ok){
+        if(r.status===403 || r.status===429){
+          const resetText=reset?` Retry after ${new Date(Number(reset)*1000).toLocaleTimeString()}.`:'';
+          throw new Error(`GitHub rate limit.${resetText}`);
+        }
+        throw new Error(`GitHub API ${r.status}`);
+      }
+      const data=await r.json();
+      const mapped=(data.items||[]).map(repo=>{
+        const match=state.items.find(x=>isLocalGithubMatch(x,repo));
+        return {
+          id:`github-${repo.id}`,full_name:repo.full_name,name:repo.name,
+          description:repo.description||t('githubProjectDefault'),language:repo.language||'Open source',
+          stars:repo.stargazers_count||0,license:repo.license?.spdx_id||'Open source',
+          updatedAt:repo.updated_at||repo.pushed_at||'',html_url:repo.html_url,
+          cover:['#1d252b','#080b0e'],fromGitHub:true,priority:match?1:0,
+          matchId:match?.id||null
         };
-    });
-
-    // Navigation
-    document.querySelectorAll('.main-nav a').forEach(link => {
-        link.onclick = (e) => {
-            e.preventDefault();
-            navigateTo(e.target.dataset.section);
-        };
-    });
+      });
+      const hasMore=state.githubItems.length+mapped.length<Math.min(data.total_count||0,100);
+      localStorage.setItem(cacheKey,JSON.stringify({time:Date.now(),items:mapped,hasMore}));
+      state.githubItems=append?[...state.githubItems,...mapped]:mapped;
+      state.githubPage=page;state.githubHasMore=hasMore;
+      if(!data.total_count)state.githubHasMore=false;
+      if(remaining==='0'){
+        // Keep current results usable; do not immediately start another request.
+        state.githubHasMore=false;
+      }
+    }catch(err){
+      state.githubItems=append?state.githubItems:[];
+      state.githubError=err?.message?.startsWith('GitHub rate limit')
+        ?err.message
+        :(t('githubError')||'GitHub projects are temporarily unavailable.');
+      state.githubHasMore=false;
+    }finally{state.githubLoading=false;renderCatalog();}
+  },append?0:280)
 }
-
-// UI update functions
-function updateUI() {
-    const user = UserManager.getCurrentUser();
-    updateHeader(user);
-    updateCurrentSection();
-}
-
-window.addEventListener('userStateChanged', updateUI);
+async function fetchGitLabProjects(query,{append=false}={}){const q=query.trim();if(q.length<2){state.gitlabItems=[];state.gitlabError='';state.gitlabPage=1;state.gitlabHasMore=false;renderCatalog();return}clearTimeout(state.gitlabTimer);state.gitlabTimer=setTimeout(async()=>{state.gitlabLoading=true;state.gitlabError='';renderCatalog();try{const page=append?state.gitlabPage+1:1;const url=`${glApi}/projects?search=${encodeURIComponent(q)}&order_by=star_count&sort=desc&simple=true&per_page=12&page=${page}`;const r=await fetch(url);if(!r.ok)throw new Error(`GitLab API ${r.status}`);const data=await r.json();const mapped=(data||[]).map(repo=>{const match=state.items.find(x=>{const names=[x.name,...(x.aliases||[])].map(norm);const rn=[repo.name,repo.path].map(norm);return names.some(a=>rn.includes(a)) });return{id:`gitlab-${repo.id}`,projectKey:String(repo.id),name:repo.name,path:repo.path,web_url:repo.web_url,description:repo.description||t('gitlabProjectDefault'),language:repo.programming_language?.name||'Open source',stars:repo.star_count||0,license:repo.license?.name||'Open source',updatedAt:repo.last_activity_at||repo.created_at||'',fromGitLab:true,cover:['#2b2021','#100b0c'],priority:match?1:0,matchId:match?.id||null}});state.gitlabItems=append?[...state.gitlabItems,...mapped]:mapped;state.gitlabPage=page;const nextHeader=r.headers.get('x-next-page');state.gitlabHasMore=!!nextHeader;if(!mapped.length)state.gitlabHasMore=false}catch(err){state.gitlabItems=append?state.gitlabItems:[];state.gitlabError=t('gitlabError')||'GitLab projects are temporarily unavailable.';state.gitlabHasMore=false}finally{state.gitlabLoading=false;renderCatalog()}},append?0:280)}
+$('#closeDialog').onclick=closeDialog;$('#detailsDialog').addEventListener('click',e=>{if(e.target===$('#detailsDialog'))closeDialog()});$('#searchInput').oninput=e=>{state.query=e.target.value;state.githubPage=1;state.gitlabPage=1;renderCatalog();fetchGitHubProjects(state.query);fetchGitLabProjects(state.query)};$('#sortSelect').onchange=e=>{state.sort=e.target.value;renderCatalog()};$$('.filter').forEach(b=>b.onclick=()=>{$$('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.category=String(b.dataset.category||'all').toLowerCase();state.githubPage=1;state.gitlabPage=1;if(state.category!=='all'){state.githubItems=[];state.gitlabItems=[];state.githubHasMore=false;state.gitlabHasMore=false;}renderCatalog();document.getElementById('store')?.scrollIntoView({behavior:'smooth',block:'start'});});$$('.source-check input').forEach(c=>c.onchange=()=>{c.checked?state.sources.add(c.value):state.sources.delete(c.value);if(String(state.category)==='language' && c.checked){ c.checked=false; state.sources.delete(c.value); }renderCatalog()});$('#profileBtn').onclick=()=>go('account');$('#themeBtn').onclick=()=>document.body.classList.toggle('light');$('#languageSelect').onchange=e=>{localStorage.setItem('kssteam-lang',e.target.value);applyI18n();renderFeatured();renderCatalog();renderLibrary();if(state.route?.startsWith('github/'))renderGithubPage(decodeURIComponent(state.route.slice(7)));if(state.route?.startsWith('gh/'))renderGithubPage(decodeURIComponent(state.route.slice(3)));if(state.route?.startsWith('gitlab/'))renderGitLabPage(decodeURIComponent(state.route.slice(7)));if(state.route?.startsWith('gl/'))renderGitLabPage(decodeURIComponent(state.route.slice(3)))};window.addEventListener('hashchange',route);function closeDialog(){const d=$('#detailsDialog');if(d?.open&&typeof d.close==='function')d.close();else d?.removeAttribute('open')}
+(async()=>{state.user=currentUser();applyI18n();syncProfile();await loadCatalog()})();

@@ -1,0 +1,1890 @@
+[
+  {
+    "id": "rust-pulse",
+    "name": "Rust Pulse",
+    "category": "software",
+    "version": "Latest",
+    "rating": 5.0,
+    "license": "GPL-3.0",
+    "featured": 0,
+    "priority": 1,
+    "updatedAt": "2026-08-29",
+    "description": "A Rust system process manager and resource monitor with CPU/memory usage, process search, sorting, and termination.",
+    "longDescription": "Rust Pulse is a system process manager and resource monitor written in Rust. It displays CPU and memory usage, running processes, search, sorting, and process termination through a text-based interface.",
+    "tags": [
+      "rust",
+      "process-manager",
+      "system-monitor",
+      "resource-monitor",
+      "windows",
+      "cli",
+      "system-tools"
+    ],
+    "aliases": [
+      "Rust-Pulse",
+      "Rust Pulse",
+      "rust-pulse"
+    ],
+    "cover": [
+      "#2b201a",
+      "#0b0908"
+    ],
+    "sources": [
+      {
+        "type": "github",
+        "label": "GitHub Releases",
+        "url": "https://github.com/sk-steam/Rust-Pulse/releases",
+        "notes": "Official project releases and Windows builds."
+      }
+    ],
+    "repository": "https://github.com/sk-steam/Rust-Pulse"
+  },
+  {
+    "id": "ks-game",
+    "name": "KS Game",
+    "category": "game",
+    "version": "1.2.0",
+    "rating": 4.8,
+    "license": "Own / Free",
+    "featured": 1,
+    "updatedAt": "2026-08-20",
+    "description": "A 2D sandbox survival game with factories, logistics and zombies.",
+    "longDescription": "KS Game is a moddable 2D sandbox survival project with resource extraction, factories, logistics, turrets, world generation and multiplayer-ready architecture.",
+    "tags": [
+      "survival",
+      "sandbox",
+      "factory",
+      "zombies",
+      "mods"
+    ],
+    "cover": [
+      "#7b1f29",
+      "#161010"
+    ],
+    "sources": [
+      {
+        "type": "github",
+        "label": "GitHub release",
+        "url": "https://github.com/"
+      }
+    ]
+  },
+  {
+    "id": "ks-launcher",
+    "name": "KS Steam Client",
+    "category": "software",
+    "version": "0.1.0",
+    "rating": 4.7,
+    "license": "Own / Free",
+    "featured": 1,
+    "updatedAt": "2026-08-26",
+    "description": "The future desktop client for the KS Steam ecosystem.",
+    "tags": [
+      "launcher",
+      "client",
+      "desktop",
+      "ks-steam"
+    ],
+    "cover": [
+      "#43551b",
+      "#10130b"
+    ],
+    "sources": [
+      {
+        "type": "github",
+        "label": "Latest build",
+        "url": "https://github.com/"
+      }
+    ]
+  },
+  {
+    "id": "plugin-sdk",
+    "name": "KS Steam Plugin SDK",
+    "category": "plugin",
+    "version": "0.4",
+    "rating": 4.6,
+    "license": "MIT",
+    "featured": 0,
+    "updatedAt": "2026-08-12",
+    "description": "SDK for building KS Steam Client extensions.",
+    "tags": [
+      "sdk",
+      "plugins",
+      "api",
+      "extensions"
+    ],
+    "cover": [
+      "#1f544e",
+      "#0e1715"
+    ],
+    "sources": [
+      {
+        "type": "github",
+        "label": "SDK",
+        "url": "https://github.com/"
+      }
+    ]
+  },
+  {
+    "id": "python",
+    "name": "Python",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.7,
+    "license": "PSF License",
+    "featured": 1,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "Programming language for AI, machine learning, automation and backend development.",
+    "longDescription": "AI, Machine Learning, Backend. Programming language for AI, machine learning, automation and backend development.",
+    "tags": [
+      "language",
+      "ai",
+      "-machine-learning",
+      "-backend"
+    ],
+    "cover": [
+      "hsl(327,35%,28%)",
+      "hsl(57,30%,10%)"
+    ],
+    "aliases": [
+      "Python",
+      "python"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Official downloads",
+        "url": "https://www.python.org/downloads/",
+        "notes": "AI, Machine Learning, Backend"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "javascript",
+    "name": "JavaScript",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.7,
+    "license": "MIT",
+    "featured": 1,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "The core language of the modern web, also used on servers through Node.js.",
+    "longDescription": "Web interfaces and servers. The core language of the modern web, also used on servers through Node.js.",
+    "tags": [
+      "language",
+      "web-interfaces-and-servers"
+    ],
+    "cover": [
+      "hsl(12,35%,28%)",
+      "hsl(140,30%,10%)"
+    ],
+    "aliases": [
+      "JavaScript",
+      "javascript"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Node.js",
+        "url": "https://nodejs.org/en/download",
+        "notes": "Web interfaces and servers"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "typescript",
+    "name": "TypeScript",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.7,
+    "license": "Apache-2.0",
+    "featured": 1,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A typed superset of JavaScript for scalable web and server applications.",
+    "longDescription": "Extended JavaScript. A typed superset of JavaScript for scalable web and server applications.",
+    "tags": [
+      "language",
+      "extended-javascript"
+    ],
+    "cover": [
+      "hsl(125,35%,28%)",
+      "hsl(114,30%,10%)"
+    ],
+    "aliases": [
+      "TypeScript",
+      "typescript"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "npm / official",
+        "url": "https://www.typescriptlang.org/download/",
+        "notes": "Extended JavaScript"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "java",
+    "name": "Java",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.7,
+    "license": "GPL-2.0-with-classpath-exception",
+    "featured": 1,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A widely used JVM language for enterprise software and tooling.",
+    "longDescription": "Enterprise systems, Android. A widely used JVM language for enterprise software and tooling.",
+    "tags": [
+      "language",
+      "enterprise-systems",
+      "-android"
+    ],
+    "cover": [
+      "hsl(71,35%,28%)",
+      "hsl(52,30%,10%)"
+    ],
+    "aliases": [
+      "Java",
+      "java"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Eclipse Temurin",
+        "url": "https://adoptium.net/",
+        "notes": "Enterprise systems, Android"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "c",
+    "name": "C",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.7,
+    "license": "Various",
+    "featured": 1,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A foundational systems programming language with broad compiler support.",
+    "longDescription": "Systems software, microcontrollers. A foundational systems programming language with broad compiler support.",
+    "tags": [
+      "language",
+      "systems-software",
+      "-microcontrollers"
+    ],
+    "cover": [
+      "hsl(346,35%,28%)",
+      "hsl(279,30%,10%)"
+    ],
+    "aliases": [
+      "C",
+      "c"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "GCC / MinGW / MSVC",
+        "url": "https://gcc.gnu.org/",
+        "notes": "Systems software, microcontrollers"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "cpp",
+    "name": "C++",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.7,
+    "license": "Various",
+    "featured": 1,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A high-performance systems language used by engines, desktop software and infrastructure.",
+    "longDescription": "Game engines, high performance. A high-performance systems language used by engines, desktop software and infrastructure.",
+    "tags": [
+      "language",
+      "game-engines",
+      "-high-performance"
+    ],
+    "cover": [
+      "hsl(44,35%,28%)",
+      "hsl(302,30%,10%)"
+    ],
+    "aliases": [
+      "C++",
+      "cpp"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Visual Studio / LLVM",
+        "url": "https://visualstudio.microsoft.com/downloads/",
+        "notes": "Game engines, high performance"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "csharp",
+    "name": "C#",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.7,
+    "license": "MIT / various",
+    "featured": 1,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A modern language for .NET applications, games and tooling.",
+    "longDescription": ".NET, Unity. A modern language for .NET applications, games and tooling.",
+    "tags": [
+      "language",
+      ".net",
+      "-unity"
+    ],
+    "cover": [
+      "hsl(216,35%,28%)",
+      "hsl(16,30%,10%)"
+    ],
+    "aliases": [
+      "C#",
+      "csharp"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": ".NET SDK",
+        "url": "https://dotnet.microsoft.com/download",
+        "notes": ".NET, Unity"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "php",
+    "name": "PHP",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.7,
+    "license": "PHP-3.01",
+    "featured": 1,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A server-side language widely used for dynamic websites and web backends.",
+    "longDescription": "Web backend. A server-side language widely used for dynamic websites and web backends.",
+    "tags": [
+      "language",
+      "web-backend"
+    ],
+    "cover": [
+      "hsl(15,35%,28%)",
+      "hsl(47,30%,10%)"
+    ],
+    "aliases": [
+      "PHP",
+      "php"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "PHP for Windows",
+        "url": "https://www.php.net/downloads.php",
+        "notes": "Web backend"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "go",
+    "name": "Go / Golang",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.7,
+    "license": "BSD-3-Clause",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A compiled language designed for simple, fast and reliable services.",
+    "longDescription": "Cloud services, DevOps. A compiled language designed for simple, fast and reliable services.",
+    "tags": [
+      "language",
+      "cloud-services",
+      "-devops"
+    ],
+    "cover": [
+      "hsl(111,35%,28%)",
+      "hsl(119,30%,10%)"
+    ],
+    "aliases": [
+      "Go",
+      "go"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Official downloads",
+        "url": "https://go.dev/dl/",
+        "notes": "Cloud services, DevOps"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "rust",
+    "name": "Rust",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.7,
+    "license": "MIT / Apache-2.0",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A systems programming language focused on memory safety, concurrency and performance.",
+    "longDescription": "Systems safety, speed. A systems programming language focused on memory safety, concurrency and performance.",
+    "tags": [
+      "language",
+      "systems-safety",
+      "-speed"
+    ],
+    "cover": [
+      "hsl(258,35%,28%)",
+      "hsl(308,30%,10%)"
+    ],
+    "aliases": [
+      "Rust",
+      "rust"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "rustup-init",
+        "url": "https://rustup.rs/",
+        "notes": "Systems safety, speed"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "swift",
+    "name": "Swift",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.7,
+    "license": "Apache-2.0",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "Apple’s modern programming language for apps and systems software.",
+    "longDescription": "Apple ecosystem: iOS/macOS. Apple’s modern programming language for apps and systems software.",
+    "tags": [
+      "language",
+      "apple-ecosystem:-iosmacos"
+    ],
+    "cover": [
+      "hsl(13,35%,28%)",
+      "hsl(287,30%,10%)"
+    ],
+    "aliases": [
+      "Swift",
+      "swift"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Xcode / Apple Developer",
+        "url": "https://developer.apple.com/xcode/",
+        "notes": "Apple ecosystem: iOS/macOS"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "kotlin",
+    "name": "Kotlin",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.7,
+    "license": "Apache-2.0",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A concise JVM language used heavily in Android and backend development.",
+    "longDescription": "Android, modern backend. A concise JVM language used heavily in Android and backend development.",
+    "tags": [
+      "language",
+      "android",
+      "-modern-backend"
+    ],
+    "cover": [
+      "hsl(101,35%,28%)",
+      "hsl(332,30%,10%)"
+    ],
+    "aliases": [
+      "Kotlin",
+      "kotlin"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Official / IDE",
+        "url": "https://kotlinlang.org/",
+        "notes": "Android, modern backend"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "ruby",
+    "name": "Ruby",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "Ruby License",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A dynamic language known for expressive syntax and web development.",
+    "longDescription": "Web development, scripting. A dynamic language known for expressive syntax and web development.",
+    "tags": [
+      "language",
+      "web-development",
+      "-scripting"
+    ],
+    "cover": [
+      "hsl(359,35%,28%)",
+      "hsl(279,30%,10%)"
+    ],
+    "aliases": [
+      "Ruby",
+      "ruby"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "RubyInstaller",
+        "url": "https://rubyinstaller.org/",
+        "notes": "Web development, scripting"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "sql",
+    "name": "SQL",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "Various",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "The standard language family used to query and manipulate relational databases.",
+    "longDescription": "Databases. The standard language family used to query and manipulate relational databases.",
+    "tags": [
+      "language",
+      "databases"
+    ],
+    "cover": [
+      "hsl(214,35%,28%)",
+      "hsl(112,30%,10%)"
+    ],
+    "aliases": [
+      "SQL",
+      "sql"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "PostgreSQL / MySQL / SQLite",
+        "url": "https://www.postgresql.org/download/",
+        "notes": "Databases"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "r",
+    "name": "R",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "GPL-2 / GPL-3",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A language and environment for statistical computing and visualization.",
+    "longDescription": "Data analysis, statistics. A language and environment for statistical computing and visualization.",
+    "tags": [
+      "language",
+      "data-analysis",
+      "-statistics"
+    ],
+    "cover": [
+      "hsl(229,35%,28%)",
+      "hsl(301,30%,10%)"
+    ],
+    "aliases": [
+      "R",
+      "r"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "CRAN",
+        "url": "https://cran.r-project.org/",
+        "notes": "Data analysis, statistics"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "matlab",
+    "name": "MATLAB",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "Proprietary",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A technical computing environment for engineering, simulation and numerical analysis.",
+    "longDescription": "Engineering calculations. A technical computing environment for engineering, simulation and numerical analysis.",
+    "tags": [
+      "language",
+      "engineering-calculations"
+    ],
+    "cover": [
+      "hsl(142,35%,28%)",
+      "hsl(3,30%,10%)"
+    ],
+    "aliases": [
+      "MATLAB",
+      "matlab"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "MathWorks",
+        "url": "https://www.mathworks.com/downloads/",
+        "notes": "Engineering calculations"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "dart",
+    "name": "Dart",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "BSD-3-Clause",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "The language powering Flutter applications across mobile, desktop and web.",
+    "longDescription": "Flutter mobile apps. The language powering Flutter applications across mobile, desktop and web.",
+    "tags": [
+      "language",
+      "flutter-mobile-apps"
+    ],
+    "cover": [
+      "hsl(81,35%,28%)",
+      "hsl(357,30%,10%)"
+    ],
+    "aliases": [
+      "Dart",
+      "dart"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Dart SDK / Flutter",
+        "url": "https://dart.dev/get-dart",
+        "notes": "Flutter mobile apps"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "scala",
+    "name": "Scala",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "Apache-2.0",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A JVM language combining object-oriented and functional programming.",
+    "longDescription": "Big data, JVM. A JVM language combining object-oriented and functional programming.",
+    "tags": [
+      "language",
+      "big-data",
+      "-jvm"
+    ],
+    "cover": [
+      "hsl(216,35%,28%)",
+      "hsl(174,30%,10%)"
+    ],
+    "aliases": [
+      "Scala",
+      "scala"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Official downloads",
+        "url": "https://www.scala-lang.org/download/",
+        "notes": "Big data, JVM"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "lua",
+    "name": "Lua",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "MIT",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A lightweight embeddable scripting language widely used in games and tools.",
+    "longDescription": "Embedded scripting, games. A lightweight embeddable scripting language widely used in games and tools.",
+    "tags": [
+      "language",
+      "embedded-scripting",
+      "-games"
+    ],
+    "cover": [
+      "hsl(142,35%,28%)",
+      "hsl(79,30%,10%)"
+    ],
+    "aliases": [
+      "Lua",
+      "lua"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Lua / LuaBinaries",
+        "url": "https://www.lua.org/download.html",
+        "notes": "Embedded scripting, games"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "perl",
+    "name": "Perl",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "GPL / Artistic",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A mature scripting language strong in text processing and automation.",
+    "longDescription": "Administration, text scripts. A mature scripting language strong in text processing and automation.",
+    "tags": [
+      "language",
+      "administration",
+      "-text-scripts"
+    ],
+    "cover": [
+      "hsl(110,35%,28%)",
+      "hsl(172,30%,10%)"
+    ],
+    "aliases": [
+      "Perl",
+      "perl"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Strawberry Perl",
+        "url": "https://strawberryperl.com/",
+        "notes": "Administration, text scripts"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "objective-c",
+    "name": "Objective-C",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "MIT / Apple SDK terms",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A legacy Apple language still encountered in older macOS and iOS codebases.",
+    "longDescription": "Apple legacy development. A legacy Apple language still encountered in older macOS and iOS codebases.",
+    "tags": [
+      "language",
+      "apple-legacy-development"
+    ],
+    "cover": [
+      "hsl(52,35%,28%)",
+      "hsl(47,30%,10%)"
+    ],
+    "aliases": [
+      "Objective-C",
+      "objective-c"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Xcode",
+        "url": "https://developer.apple.com/xcode/",
+        "notes": "Apple legacy development"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "haskell",
+    "name": "Haskell",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "BSD-3-Clause",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A strongly typed functional language for advanced programming and research.",
+    "longDescription": "Functional programming. A strongly typed functional language for advanced programming and research.",
+    "tags": [
+      "language",
+      "functional-programming"
+    ],
+    "cover": [
+      "hsl(194,35%,28%)",
+      "hsl(49,30%,10%)"
+    ],
+    "aliases": [
+      "Haskell",
+      "haskell"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "GHCup",
+        "url": "https://www.haskell.org/ghcup/",
+        "notes": "Functional programming"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "elixir",
+    "name": "Elixir",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "Apache-2.0",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A functional language on the BEAM VM designed for concurrent and distributed systems.",
+    "longDescription": "Concurrent web systems. A functional language on the BEAM VM designed for concurrent and distributed systems.",
+    "tags": [
+      "language",
+      "concurrent-web-systems"
+    ],
+    "cover": [
+      "hsl(183,35%,28%)",
+      "hsl(176,30%,10%)"
+    ],
+    "aliases": [
+      "Elixir",
+      "elixir"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Official install",
+        "url": "https://elixir-lang.org/install.html",
+        "notes": "Concurrent web systems"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "clojure",
+    "name": "Clojure",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "EPL-1.0",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A modern Lisp dialect targeting the JVM and other platforms.",
+    "longDescription": "Lisp on the JVM. A modern Lisp dialect targeting the JVM and other platforms.",
+    "tags": [
+      "language",
+      "lisp-on-the-jvm"
+    ],
+    "cover": [
+      "hsl(309,35%,28%)",
+      "hsl(135,30%,10%)"
+    ],
+    "aliases": [
+      "Clojure",
+      "clojure"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Official tools",
+        "url": "https://clojure.org/guides/getting_started",
+        "notes": "Lisp on the JVM"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "groovy",
+    "name": "Groovy",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "Apache-2.0",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A dynamic language for the JVM with strong integration with Java tooling.",
+    "longDescription": "Dynamic JVM development. A dynamic language for the JVM with strong integration with Java tooling.",
+    "tags": [
+      "language",
+      "dynamic-jvm-development"
+    ],
+    "cover": [
+      "hsl(22,35%,28%)",
+      "hsl(235,30%,10%)"
+    ],
+    "aliases": [
+      "Groovy",
+      "groovy"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Official downloads",
+        "url": "https://groovy-lang.org/download.html",
+        "notes": "Dynamic JVM development"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "julia",
+    "name": "Julia",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "MIT",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A high-level, high-performance language for numerical and scientific computing.",
+    "longDescription": "Scientific computing. A high-level, high-performance language for numerical and scientific computing.",
+    "tags": [
+      "language",
+      "scientific-computing"
+    ],
+    "cover": [
+      "hsl(274,35%,28%)",
+      "hsl(63,30%,10%)"
+    ],
+    "aliases": [
+      "Julia",
+      "julia"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Official installer",
+        "url": "https://julialang.org/downloads/",
+        "notes": "Scientific computing"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "fortran",
+    "name": "Fortran",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "GPL / GCC runtime terms",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A long-running language family still important in scientific and numerical computing.",
+    "longDescription": "High-performance computing. A long-running language family still important in scientific and numerical computing.",
+    "tags": [
+      "language",
+      "high-performance-computing"
+    ],
+    "cover": [
+      "hsl(193,35%,28%)",
+      "hsl(40,30%,10%)"
+    ],
+    "aliases": [
+      "Fortran",
+      "fortran"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "GNU Fortran",
+        "url": "https://gcc.gnu.org/fortran/",
+        "notes": "High-performance computing"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "ada",
+    "name": "Ada",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "GPL / proprietary options",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A strongly typed language used in high-assurance and safety-critical systems.",
+    "longDescription": "Safety-critical systems. A strongly typed language used in high-assurance and safety-critical systems.",
+    "tags": [
+      "language",
+      "safety-critical-systems"
+    ],
+    "cover": [
+      "hsl(282,35%,28%)",
+      "hsl(150,30%,10%)"
+    ],
+    "aliases": [
+      "Ada",
+      "ada"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "GNAT / AdaCore",
+        "url": "https://www.adacore.com/download",
+        "notes": "Safety-critical systems"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "assembly",
+    "name": "Assembly",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "BSD-2-Clause / various",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "Low-level programming using architecture-specific assembly languages and toolchains.",
+    "longDescription": "Low-level code. Low-level programming using architecture-specific assembly languages and toolchains.",
+    "tags": [
+      "language",
+      "low-level-code"
+    ],
+    "cover": [
+      "hsl(321,35%,28%)",
+      "hsl(316,30%,10%)"
+    ],
+    "aliases": [
+      "Assembly",
+      "assembly"
+    ],
+    "sources": [
+      {
+        "type": "github",
+        "label": "GitHub / NASM",
+        "url": "https://github.com/netwide-assembler/nasm"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "vbnet",
+    "name": "Visual Basic / VB.NET",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "MIT / .NET terms",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A .NET language commonly used with Visual Studio for desktop and business applications.",
+    "longDescription": ".NET desktop and business apps. A .NET language commonly used with Visual Studio for desktop and business applications.",
+    "tags": [
+      "language",
+      ".net-desktop-and-business-apps"
+    ],
+    "cover": [
+      "hsl(185,35%,28%)",
+      "hsl(295,30%,10%)"
+    ],
+    "aliases": [
+      "Visual Basic",
+      "vbnet"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Visual Studio",
+        "url": "https://visualstudio.microsoft.com/downloads/",
+        "notes": ".NET desktop and business apps"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "delphi",
+    "name": "Delphi / Object Pascal",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "Proprietary / Community terms",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "Object Pascal tooling for desktop, database and native applications.",
+    "longDescription": "Native Windows development. Object Pascal tooling for desktop, database and native applications.",
+    "tags": [
+      "language",
+      "native-windows-development"
+    ],
+    "cover": [
+      "hsl(98,35%,28%)",
+      "hsl(35,30%,10%)"
+    ],
+    "aliases": [
+      "Delphi",
+      "delphi"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Delphi Community Edition",
+        "url": "https://www.embarcadero.com/products/delphi/start-for-free",
+        "notes": "Native Windows development"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "scratch",
+    "name": "Scratch",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "BSD-style / site terms",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A visual programming environment designed to teach programming through blocks.",
+    "longDescription": "Education, visual programming. A visual programming environment designed to teach programming through blocks.",
+    "tags": [
+      "language",
+      "education",
+      "-visual-programming"
+    ],
+    "cover": [
+      "hsl(23,35%,28%)",
+      "hsl(338,30%,10%)"
+    ],
+    "aliases": [
+      "Scratch",
+      "scratch"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Scratch Desktop",
+        "url": "https://scratch.mit.edu/download",
+        "notes": "Education, visual programming"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "powershell",
+    "name": "PowerShell",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "MIT",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A cross-platform shell and automation language from Microsoft.",
+    "longDescription": "Automation and administration. A cross-platform shell and automation language from Microsoft.",
+    "tags": [
+      "language",
+      "automation-and-administration"
+    ],
+    "cover": [
+      "hsl(116,35%,28%)",
+      "hsl(148,30%,10%)"
+    ],
+    "aliases": [
+      "PowerShell",
+      "powershell"
+    ],
+    "sources": [
+      {
+        "type": "github",
+        "label": "GitHub Releases",
+        "url": "https://github.com/PowerShell/PowerShell/releases/latest"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "bash",
+    "name": "Bash / Shell",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "GPL-3.0",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A command shell common on Linux and available on Windows through Git Bash or WSL.",
+    "longDescription": "Unix shell scripting. A command shell common on Linux and available on Windows through Git Bash or WSL.",
+    "tags": [
+      "language",
+      "unix-shell-scripting"
+    ],
+    "cover": [
+      "hsl(40,35%,28%)",
+      "hsl(119,30%,10%)"
+    ],
+    "aliases": [
+      "Bash",
+      "bash"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Git for Windows",
+        "url": "https://git-scm.com/downloads"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "zig",
+    "name": "Zig",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "MIT",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A simple systems programming language with manual control and a strong toolchain.",
+    "longDescription": "Systems programming. A simple systems programming language with manual control and a strong toolchain.",
+    "tags": [
+      "language",
+      "systems-programming"
+    ],
+    "cover": [
+      "hsl(51,35%,28%)",
+      "hsl(194,30%,10%)"
+    ],
+    "aliases": [
+      "Zig",
+      "zig"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Official binaries",
+        "url": "https://ziglang.org/download/",
+        "notes": "Systems programming"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "nim",
+    "name": "Nim",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "MIT",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A statically typed compiled language emphasizing performance and expressive syntax.",
+    "longDescription": "Compiled applications and scripting. A statically typed compiled language emphasizing performance and expressive syntax.",
+    "tags": [
+      "language",
+      "compiled-applications-and-scripting"
+    ],
+    "cover": [
+      "hsl(142,35%,28%)",
+      "hsl(232,30%,10%)"
+    ],
+    "aliases": [
+      "Nim",
+      "nim"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Official downloads",
+        "url": "https://nim-lang.org/install.html",
+        "notes": "Compiled applications and scripting"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "crystal",
+    "name": "Crystal",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "Apache-2.0",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A compiled language with Ruby-inspired syntax and native performance.",
+    "longDescription": "Compiled developer tools. A compiled language with Ruby-inspired syntax and native performance.",
+    "tags": [
+      "language",
+      "compiled-developer-tools"
+    ],
+    "cover": [
+      "hsl(325,35%,28%)",
+      "hsl(186,30%,10%)"
+    ],
+    "aliases": [
+      "Crystal",
+      "crystal"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Official binaries",
+        "url": "https://crystal-lang.org/install/",
+        "notes": "Compiled developer tools"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "v",
+    "name": "V (Vlang)",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "MIT",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A pragmatic compiled language designed for fast builds and straightforward systems development.",
+    "longDescription": "Simple compiled software. A pragmatic compiled language designed for fast builds and straightforward systems development.",
+    "tags": [
+      "language",
+      "simple-compiled-software"
+    ],
+    "cover": [
+      "hsl(83,35%,28%)",
+      "hsl(189,30%,10%)"
+    ],
+    "aliases": [
+      "V (Vlang)",
+      "v"
+    ],
+    "sources": [
+      {
+        "type": "github",
+        "label": "GitHub repository",
+        "url": "https://github.com/vlang/v"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "ocaml",
+    "name": "OCaml",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "LGPL-2.1 with linking exception",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A mature ML-family language used in compilers, tooling and research.",
+    "longDescription": "Functional and systems software. A mature ML-family language used in compilers, tooling and research.",
+    "tags": [
+      "language",
+      "functional-and-systems-software"
+    ],
+    "cover": [
+      "hsl(181,35%,28%)",
+      "hsl(107,30%,10%)"
+    ],
+    "aliases": [
+      "OCaml",
+      "ocaml"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Official install",
+        "url": "https://ocaml.org/docs/installing-ocaml",
+        "notes": "Functional and systems software"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "fsharp",
+    "name": "F#",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "MIT",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A functional-first language on .NET for data, services and applications.",
+    "longDescription": ".NET functional programming. A functional-first language on .NET for data, services and applications.",
+    "tags": [
+      "language",
+      ".net-functional-programming"
+    ],
+    "cover": [
+      "hsl(343,35%,28%)",
+      "hsl(136,30%,10%)"
+    ],
+    "aliases": [
+      "F#",
+      "fsharp"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": ".NET SDK",
+        "url": "https://dotnet.microsoft.com/download",
+        "notes": ".NET functional programming"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "racket",
+    "name": "Scheme / Racket",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "MIT / LGPL",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A programmable language platform in the Scheme family, useful for teaching and language design.",
+    "longDescription": "Language research and education. A programmable language platform in the Scheme family, useful for teaching and language design.",
+    "tags": [
+      "language",
+      "language-research-and-education"
+    ],
+    "cover": [
+      "hsl(359,35%,28%)",
+      "hsl(349,30%,10%)"
+    ],
+    "aliases": [
+      "Scheme",
+      "racket"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Official installer",
+        "url": "https://download.racket-lang.org/",
+        "notes": "Language research and education"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "common-lisp",
+    "name": "Common Lisp (SBCL)",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "BSD-style / public domain",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A mature programmable Lisp ecosystem with SBCL as a popular implementation.",
+    "longDescription": "Advanced functional / general programming. A mature programmable Lisp ecosystem with SBCL as a popular implementation.",
+    "tags": [
+      "language",
+      "advanced-functional--general-programming"
+    ],
+    "cover": [
+      "hsl(331,35%,28%)",
+      "hsl(36,30%,10%)"
+    ],
+    "aliases": [
+      "Common Lisp (SBCL)",
+      "common-lisp"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "SBCL",
+        "url": "https://www.sbcl.org/platform-table.html",
+        "notes": "Advanced functional / general programming"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "prolog",
+    "name": "Prolog (SWI-Prolog)",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "BSD-2-Clause / LGPL",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A logic programming language with a strong ecosystem around SWI-Prolog.",
+    "longDescription": "Logic programming. A logic programming language with a strong ecosystem around SWI-Prolog.",
+    "tags": [
+      "language",
+      "logic-programming"
+    ],
+    "cover": [
+      "hsl(311,35%,28%)",
+      "hsl(325,30%,10%)"
+    ],
+    "aliases": [
+      "Prolog (SWI-Prolog)",
+      "prolog"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "SWI-Prolog",
+        "url": "https://www.swi-prolog.org/download/stable",
+        "notes": "Logic programming"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "abap",
+    "name": "ABAP",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "SAP terms",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "SAP’s application programming language for enterprise business systems.",
+    "longDescription": "SAP enterprise development. SAP’s application programming language for enterprise business systems.",
+    "tags": [
+      "language",
+      "sap-enterprise-development"
+    ],
+    "cover": [
+      "hsl(87,35%,28%)",
+      "hsl(273,30%,10%)"
+    ],
+    "aliases": [
+      "ABAP",
+      "abap"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "SAP developer tooling",
+        "url": "https://developers.sap.com/topics/abap-platform-trial.html",
+        "notes": "SAP enterprise development"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "apex",
+    "name": "Apex",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "Salesforce terms",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A Java-like language for business logic on the Salesforce platform.",
+    "longDescription": "Salesforce cloud development. A Java-like language for business logic on the Salesforce platform.",
+    "tags": [
+      "language",
+      "salesforce-cloud-development"
+    ],
+    "cover": [
+      "hsl(125,35%,28%)",
+      "hsl(83,30%,10%)"
+    ],
+    "aliases": [
+      "Apex",
+      "apex"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Salesforce / VS Code",
+        "url": "https://developer.salesforce.com/tools/sfdxcli",
+        "notes": "Salesforce cloud development"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "solidity",
+    "name": "Solidity",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "GPL-3.0",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A statically typed language for Ethereum-compatible smart contracts.",
+    "longDescription": "Blockchain smart contracts. A statically typed language for Ethereum-compatible smart contracts.",
+    "tags": [
+      "language",
+      "blockchain-smart-contracts"
+    ],
+    "cover": [
+      "hsl(236,35%,28%)",
+      "hsl(194,30%,10%)"
+    ],
+    "aliases": [
+      "Solidity",
+      "solidity"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "solc / Remix",
+        "url": "https://docs.soliditylang.org/en/latest/installing-solidity.html",
+        "notes": "Blockchain smart contracts"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "vbscript",
+    "name": "VBScript",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "Microsoft terms",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A legacy Windows scripting technology historically used for automation.",
+    "longDescription": "Legacy Windows scripting. A legacy Windows scripting technology historically used for automation.",
+    "tags": [
+      "language",
+      "legacy-windows-scripting"
+    ],
+    "cover": [
+      "hsl(138,35%,28%)",
+      "hsl(327,30%,10%)"
+    ],
+    "aliases": [
+      "VBScript",
+      "vbscript"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Windows component",
+        "url": "https://learn.microsoft.com/en-us/previous-versions//at5ydy3c(v=vs.85)",
+        "notes": "Legacy Windows scripting"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "logo",
+    "name": "Logo",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "GPL-2.0",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "An educational language centered around turtle graphics and interactive programming.",
+    "longDescription": "Education, programming basics. An educational language centered around turtle graphics and interactive programming.",
+    "tags": [
+      "language",
+      "education",
+      "-programming-basics"
+    ],
+    "cover": [
+      "hsl(352,35%,28%)",
+      "hsl(285,30%,10%)"
+    ],
+    "aliases": [
+      "Logo",
+      "logo"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "FMSLogo",
+        "url": "https://fmslogo.sourceforge.io/",
+        "notes": "Education, programming basics"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "raku",
+    "name": "Raku",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "Artistic-2.0",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A multi-paradigm language formerly known as Perl 6, with Rakudo as its primary implementation.",
+    "longDescription": "Modern scripting language. A multi-paradigm language formerly known as Perl 6, with Rakudo as its primary implementation.",
+    "tags": [
+      "language",
+      "modern-scripting-language"
+    ],
+    "cover": [
+      "hsl(112,35%,28%)",
+      "hsl(350,30%,10%)"
+    ],
+    "aliases": [
+      "Raku",
+      "raku"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Rakudo Star",
+        "url": "https://rakudo.org/star",
+        "notes": "Modern scripting language"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  },
+  {
+    "id": "actionscript",
+    "name": "ActionScript",
+    "category": "language",
+    "version": "Latest",
+    "rating": 4.4,
+    "license": "Legacy / Adobe terms",
+    "featured": 0,
+    "priority": 0,
+    "updatedAt": "2026-08-29",
+    "description": "A legacy scripting language associated with Adobe Flash-era applications and tooling.",
+    "longDescription": "Legacy Flash development. A legacy scripting language associated with Adobe Flash-era applications and tooling.",
+    "tags": [
+      "language",
+      "legacy-flash-development"
+    ],
+    "cover": [
+      "hsl(166,35%,28%)",
+      "hsl(28,30%,10%)"
+    ],
+    "aliases": [
+      "ActionScript",
+      "actionscript"
+    ],
+    "sources": [
+      {
+        "type": "direct",
+        "label": "Legacy resources",
+        "url": "https://www.adobe.com/products/flashplayer-end-of-life.html",
+        "notes": "Legacy Flash development"
+      }
+    ],
+    "profileType": "language",
+    "downloadMode": "official"
+  }
+]
